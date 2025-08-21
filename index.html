@@ -13,7 +13,8 @@
         .phone-screen { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
         .transcript-bubble { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
         .transcript-bubble.visible { opacity: 1; transform: translateY(0); }
-        .transcript-bubble p { font-size: 0.875rem; line-height: 1.25rem; }
+        /* --- NUEVO: Texto de transcripción aún más pequeño --- */
+        .transcript-bubble p { font-size: 0.8rem; line-height: 1.1rem; }
         .feature-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background-color: rgb(55 65 81 / 0.5); border-radius: 0.75rem; border: 1px solid transparent; opacity: 0.4; transition: all 0.5s ease; }
         .feature-item.highlighted { opacity: 1; background-color: rgb(31 41 55 / 0.7); border-color: rgb(59 130 246 / 0.5); }
         .tech-log-container { font-family: 'Roboto Mono', monospace; background-color: #000; border: 1px solid #374151; }
@@ -26,7 +27,7 @@
         .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
         .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-        #summary-modal { transition: opacity 0.3s ease; }
+        #value-summary { transition: opacity 0.5s ease; }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
@@ -37,24 +38,11 @@
             <p class="text-lg text-gray-400 mt-2">Experiencia de Cliente · Valor de Negocio · Flujo Técnico</p>
         </div>
 
-        <!-- Panel de KPIs -->
         <div id="kpi-panel" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-4 rounded-xl border border-gray-700">
-            <div class="text-center">
-                <p class="text-sm text-gray-400">Tiempo de Espera</p>
-                <p id="kpi-wait-time" class="text-2xl font-bold text-green-400 kpi-value">--</p>
-            </div>
-            <div class="text-center">
-                <p class="text-sm text-gray-400">Resolución 1er Contacto</p>
-                <p id="kpi-fcr" class="text-2xl font-bold text-green-400 kpi-value">--</p>
-            </div>
-            <div class="text-center">
-                <p class="text-sm text-gray-400">Coste Interacción</p>
-                <p id="kpi-cost" class="text-2xl font-bold text-green-400 kpi-value">--</p>
-            </div>
-            <div class="text-center">
-                <p class="text-sm text-gray-400">CSAT Proyectado</p>
-                <p id="kpi-csat" class="text-2xl font-bold text-green-400 kpi-value">--</p>
-            </div>
+            <div class="text-center"><p class="text-sm text-gray-400">Tiempo de Espera</p><p id="kpi-wait-time" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">Resolución 1er Contacto</p><p id="kpi-fcr" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">Coste Interacción</p><p id="kpi-cost" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">CSAT Proyectado</p><p id="kpi-csat" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -77,7 +65,7 @@
             <!-- Panel 2: Características Clave -->
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
                 <h2 class="text-xl font-semibold mb-4 text-center">Panel de Valor</h2>
-                <div class="space-y-3 flex-grow">
+                <div id="features-list" class="space-y-3 flex-grow">
                     <div class="feature-item" data-feature-id="1"><span class="text-2xl">⚡️</span><p>Contestación instantánea y proactiva</p></div>
                     <div class="feature-item" data-feature-id="2"><span class="text-2xl">🔍</span><p>Identificación y contexto del cliente (CRM)</p></div>
                     <div class="feature-item" data-feature-id="3"><span class="text-2xl">🗣️</span><p>Comprensión del Lenguaje Natural</p></div>
@@ -85,6 +73,16 @@
                     <div class="feature-item" data-feature-id="5"><span class="text-2xl">🚀</span><p>Autoservicio y resolución de problemas</p></div>
                     <div class="feature-item" data-feature-id="6"><span class="text-2xl">✨</span><p>Escalado transparente a agente humano</p></div>
                     <div class="feature-item" data-feature-id="7"><span class="text-2xl">📝</span><p>Transferencia de contexto completa</p></div>
+                </div>
+                <!-- --- NUEVO: Resumen final integrado --- -->
+                <div id="value-summary" class="mt-6 pt-6 border-t border-gray-700 opacity-0 pointer-events-none">
+                     <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
+                     <div class="space-y-2 text-sm">
+                         <p class="flex justify-between"><span>✅ Tiempo de espera:</span> <strong id="summary-wait-time"></strong></p>
+                         <p class="flex justify-between"><span>✅ Resolución en primer contacto:</span> <strong id="summary-fcr"></strong></p>
+                         <p class="flex justify-between"><span>⚠️ Coste de la interacción:</span> <strong id="summary-cost"></strong></p>
+                         <p class="flex justify-between"><span>📈 Satisfacción del cliente:</span> <strong id="summary-csat"></strong></p>
+                     </div>
                 </div>
             </div>
 
@@ -101,73 +99,57 @@
             </button>
         </div>
     </div>
-    
-    <!-- Modal de Resumen Final -->
-    <div id="summary-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 pointer-events-none">
-        <div class="bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-700 text-center max-w-md w-full">
-            <h2 class="text-3xl font-bold text-green-400 mb-4">Consulta Resuelta con Éxito</h2>
-            <div class="space-y-3 text-left my-6">
-                <p class="flex justify-between"><span>✅ Tiempo de espera:</span> <strong id="summary-wait-time">0s</strong></p>
-                <p class="flex justify-between"><span>✅ Resolución en primer contacto:</span> <strong id="summary-fcr">Sí</strong></p>
-                <p class="flex justify-between"><span>⚠️ Coste de la interacción:</span> <strong id="summary-cost">Medio</strong></p>
-                <p class="flex justify-between"><span>📈 Satisfacción del cliente:</span> <strong id="summary-csat">Alta (95%)</strong></p>
-            </div>
-            <button id="restart-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300">
-                Reiniciar Demo
-            </button>
-        </div>
-    </div>
 
 <script>
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
             features: [1, 2],
-            logs: ["INCOMING_CALL", "POST /lookup", "RESPONSE {name}", "GET /last_invoice", "GENERATE_SPEECH"],
+            logs: ["[PBX] -> [ASISTENTE_BEYOND] - INCOMING_CALL", "[ASISTENTE_BEYOND] -> [API_CRM] - POST /lookup", "[API_CRM] -> [ASISTENTE_BEYOND] - RESPONSE {name}", "[ASISTENTE_BEYOND] -> [API_BILLING] - GET /last_invoice", "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" },
             callerName: "Carlos", callStatus: "Llamada en curso"
         },
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
             features: [3],
-            logs: ["TRANSCRIPTION", "INTENT 'query_invoice'"],
+            logs: ["[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION", "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT 'query_invoice'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" }
         },
         {
             speaker: "Bot", text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
             features: [4],
-            logs: ["GET /invoice_details", "RESPONSE {charge}", "GENERATE_SPEECH"],
+            logs: ["[ASISTENTE_BEYOND] -> [API_BILLING] - GET /invoice_details", "[API_BILLING] -> [ASISTENTE_BEYOND] - RESPONSE {charge}", "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Carlos", text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
             features: [],
-            logs: ["TRANSCRIPTION", "INTENT 'cancel_subscription'"],
+            logs: ["[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION", "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT 'cancel_subscription'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Bot", text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
             features: [5],
-            logs: ["GENERATE_SPEECH"],
+            logs: ["[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Carlos", text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
             features: [],
-            logs: ["TRANSCRIPTION", "INTENT 'request_human_agent'"],
+            logs: ["[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION", "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT 'request_human_agent'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Bot", text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación. Por favor, espera un momento.",
             features: [6, 7],
-            logs: ["PACKAGE_DATA", "INITIATE_TRANSFER"],
+            logs: ["[ASISTENTE_BEYOND] -> [CONTEXT_MANAGER] - PACKAGE_DATA", "[ASISTENTE_BEYOND] -> [PBX] - INITIATE_TRANSFER"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "95%" },
             callStatus: "Transfiriendo..."
         },
         {
             speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
             features: [],
-            logs: ["CALL_ACCEPTED", "DISPLAY_DATA"],
+            logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[CONTEXT_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
             kpis: { wait: "0s", fcr: "100%", cost: "Medio", csat: "95%" },
             callerName: "Marta (Agente)",
             summary: { wait: "0s", fcr: "Sí", cost: "Medio", csat: "Alta (95%)" }
@@ -175,7 +157,6 @@
     ];
 
     const controlBtn = document.getElementById('demo-control-btn');
-    const restartBtn = document.getElementById('restart-btn');
     const transcriptContainer = document.getElementById('transcript-container');
     const techLogContainer = document.getElementById('tech-log');
     const featureItems = document.querySelectorAll('.feature-item');
@@ -183,14 +164,9 @@
     const callStatusEl = document.getElementById('callStatus');
     const callTimerEl = document.getElementById('callTimer');
     const phoneIcon = document.getElementById('phone-icon');
-    const summaryModal = document.getElementById('summary-modal');
+    const valueSummary = document.getElementById('value-summary');
     
-    const kpiElements = {
-        wait: document.getElementById('kpi-wait-time'),
-        fcr: document.getElementById('kpi-fcr'),
-        cost: document.getElementById('kpi-cost'),
-        csat: document.getElementById('kpi-csat')
-    };
+    const kpiElements = { wait: document.getElementById('kpi-wait-time'), fcr: document.getElementById('kpi-fcr'), cost: document.getElementById('kpi-cost'), csat: document.getElementById('kpi-csat') };
 
     let currentStep = -1;
     let timerInterval;
@@ -203,8 +179,7 @@
         if (spanishVoice) utterance.voice = spanishVoice;
         utterance.lang = 'es-ES';
         if (speaker === 'Carlos') {
-            utterance.pitch = 0.8;
-            utterance.rate = 0.95;
+            utterance.pitch = 0.8; utterance.rate = 0.95;
         } else {
             utterance.pitch = 1.1;
             utterance.onstart = () => phoneIcon.classList.add('speaking');
@@ -269,7 +244,13 @@
         entry.className = 'log-entry text-sm';
         if (isProcessing) entry.id = 'processing-log';
         const timestamp = new Date().toLocaleTimeString('es-ES', { hour12: false });
-        const coloredText = logText.replace(/\[([^\]]+)\]/g, (match, p1) => `<span class="text-yellow-400">[${p1}]</span>`);
+        const coloredText = logText.replace(/\[([^\]]+)\]/g, (match, p1) => {
+            if (p1.includes('->')) {
+                 const parts = p1.split(' -> ');
+                 return `<span class="text-blue-400">[${parts[0]}]</span> -&gt; <span class="text-red-400">[${parts[1]}]</span>`;
+            }
+            return `<span class="text-yellow-400">[${p1}]</span>`;
+        });
         entry.innerHTML = `<span class="text-gray-500">${timestamp}</span> - ${coloredText}`;
         techLogContainer.appendChild(entry);
         techLogContainer.scrollTop = techLogContainer.scrollHeight;
@@ -288,12 +269,12 @@
         });
     }
 
-    function showSummaryModal(summaryData) {
+    function showSummary(summaryData) {
         document.getElementById('summary-wait-time').textContent = summaryData.wait;
         document.getElementById('summary-fcr').textContent = summaryData.fcr;
         document.getElementById('summary-cost').textContent = summaryData.cost;
         document.getElementById('summary-csat').textContent = summaryData.csat;
-        summaryModal.classList.remove('opacity-0', 'pointer-events-none');
+        valueSummary.classList.remove('opacity-0', 'pointer-events-none');
     }
 
     function renderStep(stepIndex) {
@@ -303,8 +284,7 @@
         updateKpis(step.kpis);
 
         const isBotTurn = step.speaker !== 'Carlos';
-        let typingIndicator;
-        let processingLog;
+        let typingIndicator, processingLog;
 
         if (isBotTurn) {
             typingIndicator = createTypingIndicator();
@@ -344,10 +324,10 @@
         callStatusEl.textContent = 'llamada entrante...';
         callTimerEl.textContent = '00:00';
         controlBtn.textContent = '▶ Iniciar Demo';
-        controlBtn.style.display = 'block';
+        controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
         featureItems.forEach(item => item.classList.remove('highlighted'));
         phoneIcon.classList.remove('speaking');
-        summaryModal.classList.add('opacity-0', 'pointer-events-none');
+        valueSummary.classList.add('opacity-0', 'pointer-events-none');
         updateKpis({ wait: '--', fcr: '--', cost: '--', csat: '--' });
         stopTimer();
     }
@@ -363,12 +343,16 @@
             currentStep++;
             renderStep(currentStep);
         } else {
-            controlBtn.style.display = 'none';
-            showSummaryModal(demoSteps[demoSteps.length - 1].summary);
+            showSummary(demoSteps[demoSteps.length - 1].summary);
+            controlBtn.textContent = 'Reiniciar Demo';
+            controlBtn.className = 'bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
+            currentStep++; // Increment to prevent re-triggering summary
+        }
+        if (currentStep > demoSteps.length -1) {
+            resetDemo();
         }
     });
 
-    restartBtn.addEventListener('click', resetDemo);
     resetDemo();
 </script>
 
