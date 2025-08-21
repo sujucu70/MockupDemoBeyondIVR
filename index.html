@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Interactiva: Atención al Cliente Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .phone-screen {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        .transcript-bubble {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .transcript-bubble.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: rgb(55 65 81 / 0.5); /* gray-700 with opacity */
+            border-radius: 0.75rem;
+            border: 1px solid transparent;
+            opacity: 0.4;
+            transition: opacity 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .feature-item.highlighted {
+            opacity: 1;
+            background-color: rgb(31 41 55 / 0.7); /* gray-800 with opacity */
+            border-color: rgb(59 130 246 / 0.5); /* blue-500 with opacity */
+        }
+        .feature-item .icon {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-6xl mx-auto bg-gray-800 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Demo Interactiva</h1>
+            <p class="text-lg text-gray-400 mt-2">Atención al Cliente Inteligente por Voz</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Columna Izquierda: Simulación de la Llamada -->
+            <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
+                <h2 class="text-xl font-semibold mb-4 text-center">Simulación de la Llamada</h2>
+                
+                <div class="bg-black rounded-3xl p-4 border-4 border-gray-700 phone-screen max-w-sm mx-auto">
+                    <div class="flex justify-between items-center text-sm text-gray-400 px-2">
+                        <span id="currentTime">10:30</span>
+                        <div class="bg-gray-800 h-6 w-24 rounded-full"></div>
+                        <span>85%</span>
+                    </div>
+                    <div class="text-center mt-8">
+                        <div class="w-20 h-20 bg-blue-500 rounded-full mx-auto flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.518.759a11.03 11.03 0 004.28 4.28l.759-1.518a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>
+                        </div>
+                        <p id="callerName" class="text-2xl font-semibold mt-4">Soporte Telco</p>
+                        <p id="callStatus" class="text-gray-400 mt-1">llamada entrante...</p>
+                        <p id="callTimer" class="text-gray-400 mt-4 text-lg">00:00</p>
+                    </div>
+                    <div class="mt-8 h-20"></div>
+                </div>
+                
+                <div id="transcript-container" class="mt-6 space-y-4 flex-grow overflow-y-auto pr-2">
+                    <!-- Las burbujas de la conversación se añadirán aquí -->
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Características Clave -->
+            <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
+                <h2 class="text-xl font-semibold mb-4 text-center">Características Clave Demostradas</h2>
+                <div id="features-checklist" class="space-y-3 flex-grow">
+                    <div class="feature-item" data-feature-id="1"><span class="icon">⚡️</span><p>Contestación instantánea y proactiva</p></div>
+                    <div class="feature-item" data-feature-id="2"><span class="icon">🔍</span><p>Identificación y contexto del cliente (CRM)</p></div>
+                    <div class="feature-item" data-feature-id="3"><span class="icon">🗣️</span><p>Comprensión del Lenguaje Natural</p></div>
+                    <div class="feature-item" data-feature-id="4"><span class="icon">🔄</span><p>Consulta de sistemas en tiempo real</p></div>
+                    <div class="feature-item" data-feature-id="5"><span class="icon">🚀</span><p>Autoservicio y resolución de problemas</p></div>
+                    <div class="feature-item" data-feature-id="6"><span class="icon">✨</span><p>Escalado transparente a agente humano</p></div>
+                    <div class="feature-item" data-feature-id="7"><span class="icon">📝</span><p>Transferencia de contexto completa</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="demo-control-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
+                ▶ Iniciar Demo
+            </button>
+        </div>
+    </div>
+
+<script>
+    const demoSteps = [
+        {
+            speaker: "Bot",
+            text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
+            features: [1, 2],
+            callerName: "Carlos",
+            callStatus: "Llamada en curso"
+        },
+        {
+            speaker: "Carlos",
+            text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
+            features: [3]
+        },
+        {
+            speaker: "Bot",
+            text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
+            features: [4]
+        },
+        {
+            speaker: "Carlos",
+            text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
+            features: []
+        },
+        {
+            speaker: "Bot",
+            text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
+            features: [5]
+        },
+        {
+            speaker: "Carlos",
+            text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
+            features: []
+        },
+        {
+            speaker: "Bot",
+            text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación, así no tendrás que volver a explicarlo. Por favor, espera un momento.",
+            features: [6, 7],
+            callStatus: "Transfiriendo..."
+        },
+        {
+            speaker: "Agente",
+            text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
+            features: [],
+            callerName: "Marta (Agente)"
+        }
+    ];
+
+    const controlBtn = document.getElementById('demo-control-btn');
+    const transcriptContainer = document.getElementById('transcript-container');
+    const callerNameEl = document.getElementById('callerName');
+    const callStatusEl = document.getElementById('callStatus');
+    const callTimerEl = document.getElementById('callTimer');
+    const currentTimeEl = document.getElementById('currentTime');
+    const featureItems = document.querySelectorAll('.feature-item');
+
+    let currentStep = -1;
+    let timerInterval;
+
+    function updateClock() {
+        const now = new Date();
+        currentTimeEl.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function startTimer() {
+        let seconds = 0;
+        timerInterval = setInterval(() => {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            callTimerEl.textContent = `${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    function createBubble(speaker, text) {
+        const bubble = document.createElement('div');
+        bubble.className = 'p-3 rounded-lg max-w-xs md:max-w-md transcript-bubble';
+        if (speaker === 'Carlos') {
+            bubble.classList.add('bg-blue-600', 'rounded-br-none', 'ml-auto');
+            bubble.innerHTML = `<p class="text-white">${text}</p>`;
+        } else {
+            bubble.classList.add('bg-gray-700', 'rounded-bl-none', 'mr-auto');
+            bubble.innerHTML = `<p class="font-semibold text-blue-300 mb-1">${speaker}</p><p class="text-gray-200">${text}</p>`;
+        }
+        transcriptContainer.appendChild(bubble);
+        transcriptContainer.scrollTop = transcriptContainer.scrollHeight;
+        setTimeout(() => bubble.classList.add('visible'), 50);
+    }
+
+    function highlightFeatures(featureIds) {
+        featureItems.forEach(item => {
+            const itemId = parseInt(item.dataset.featureId);
+            if (featureIds.includes(itemId)) {
+                item.classList.add('highlighted');
+            }
+        });
+    }
+
+    function renderStep(stepIndex) {
+        const step = demoSteps[stepIndex];
+        if (!step) return;
+
+        createBubble(step.speaker, step.text);
+        highlightFeatures(step.features);
+
+        if (step.callerName) callerNameEl.textContent = step.callerName;
+        if (step.callStatus) callStatusEl.textContent = step.callStatus;
+    }
+
+    function resetDemo() {
+        currentStep = -1;
+        transcriptContainer.innerHTML = '';
+        callerNameEl.textContent = 'Soporte Telco';
+        callStatusEl.textContent = 'llamada entrante...';
+        callTimerEl.textContent = '00:00';
+        controlBtn.textContent = '▶ Iniciar Demo';
+        controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
+        featureItems.forEach(item => item.classList.remove('highlighted'));
+        stopTimer();
+    }
+
+    controlBtn.addEventListener('click', () => {
+        if (currentStep === -1) {
+            resetDemo();
+            currentStep++;
+            controlBtn.textContent = 'Siguiente Paso →';
+            startTimer();
+            renderStep(currentStep);
+        } else if (currentStep < demoSteps.length - 1) {
+            currentStep++;
+            renderStep(currentStep);
+            if (currentStep === demoSteps.length - 1) {
+                controlBtn.textContent = 'Reiniciar Demo';
+                controlBtn.className = 'bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
+            }
+        } else {
+            resetDemo();
+        }
+    });
+</script>
+
+</body>
+</html>
