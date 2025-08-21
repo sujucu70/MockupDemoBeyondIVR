@@ -54,6 +54,14 @@
             opacity: 1;
             transform: translateY(0);
         }
+        /* Style for speaking indicator */
+        .phone-icon-container.speaking {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
@@ -70,7 +78,7 @@
                 <h2 class="text-xl font-semibold mb-4 text-center">Panel Cliente</h2>
                 <div class="bg-black rounded-3xl p-4 border-4 border-gray-700 phone-screen max-w-sm mx-auto">
                     <div class="text-center py-8">
-                        <div class="w-20 h-20 bg-blue-500 rounded-full mx-auto flex items-center justify-center">
+                        <div id="phone-icon" class="w-20 h-20 bg-blue-500 rounded-full mx-auto flex items-center justify-center phone-icon-container">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.518.759a11.03 11.03 0 004.28 4.28l.759-1.518a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>
                         </div>
                         <p id="callerName" class="text-2xl font-semibold mt-4">Soporte Telco</p>
@@ -190,10 +198,44 @@
     const callerNameEl = document.getElementById('callerName');
     const callStatusEl = document.getElementById('callStatus');
     const callTimerEl = document.getElementById('callTimer');
+    const phoneIcon = document.getElementById('phone-icon');
 
     let currentStep = -1;
     let timerInterval;
+    let spanishVoice = null;
 
+    // --- Speech Synthesis Logic ---
+    function loadVoices() {
+        const voices = speechSynthesis.getVoices();
+        spanishVoice = voices.find(voice => voice.lang.startsWith('es-ES')) || voices.find(voice => voice.lang.startsWith('es'));
+    }
+
+    function speak(text) {
+        if (!'speechSynthesis' in window) {
+            console.log("Speech Synthesis not supported.");
+            return;
+        }
+        // Cancel any previous speech
+        speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        if (spanishVoice) {
+            utterance.voice = spanishVoice;
+        }
+        utterance.lang = 'es-ES';
+        utterance.rate = 1;
+
+        utterance.onstart = () => phoneIcon.classList.add('speaking');
+        utterance.onend = () => phoneIcon.classList.remove('speaking');
+        
+        speechSynthesis.speak(utterance);
+    }
+
+    // Load voices when they are ready
+    speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices(); // Initial attempt
+
+    // --- Demo Control Logic ---
     function startTimer() {
         let seconds = 0;
         timerInterval = setInterval(() => {
@@ -254,6 +296,10 @@
         createBubble(step.speaker, step.text);
         highlightFeatures(step.features);
         
+        if (step.speaker === 'Bot' || step.speaker === 'Agente') {
+            speak(step.text);
+        }
+        
         let logDelay = 100;
         step.logs.forEach(log => {
             setTimeout(() => addLogEntry(log.text), logDelay);
@@ -266,6 +312,7 @@
 
     function resetDemo() {
         currentStep = -1;
+        speechSynthesis.cancel(); // Stop any ongoing speech
         transcriptContainer.innerHTML = '';
         techLogContainer.innerHTML = '<span class="text-gray-600">Esperando inicio de la demo...</span>';
         callerNameEl.textContent = 'Soporte Telco';
@@ -274,6 +321,7 @@
         controlBtn.textContent = '▶ Iniciar Demo';
         controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
         featureItems.forEach(item => item.classList.remove('highlighted'));
+        phoneIcon.classList.remove('speaking');
         stopTimer();
     }
 
@@ -301,4 +349,3 @@
 
 </body>
 </html>
-
