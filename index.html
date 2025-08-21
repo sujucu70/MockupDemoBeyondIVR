@@ -14,11 +14,13 @@
         .transcript-bubble { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
         .transcript-bubble.visible { opacity: 1; transform: translateY(0); }
         /* --- NUEVO: Texto de transcripción aún más pequeño --- */
-        .transcript-bubble p { font-size: 0.8rem; line-height: 1.1rem; }
+        .transcript-bubble p { font-size: 0.75rem; line-height: 1rem; }
         .feature-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background-color: rgb(55 65 81 / 0.5); border-radius: 0.75rem; border: 1px solid transparent; opacity: 0.4; transition: all 0.5s ease; }
         .feature-item.highlighted { opacity: 1; background-color: rgb(31 41 55 / 0.7); border-color: rgb(59 130 246 / 0.5); }
         .tech-log-container { font-family: 'Roboto Mono', monospace; background-color: #000; border: 1px solid #374151; }
         .log-entry { opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        /* --- NUEVO: Texto del log técnico más pequeño --- */
+        .log-entry { font-size: 0.7rem; line-height: 1rem; }
         .log-entry.visible { opacity: 1; transform: translateY(0); }
         .phone-icon-container.speaking { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 50% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); } }
@@ -74,7 +76,6 @@
                     <div class="feature-item" data-feature-id="6"><span class="text-2xl">✨</span><p>Escalado transparente a agente humano</p></div>
                     <div class="feature-item" data-feature-id="7"><span class="text-2xl">📝</span><p>Transferencia de contexto completa</p></div>
                 </div>
-                <!-- --- NUEVO: Resumen final integrado --- -->
                 <div id="value-summary" class="mt-6 pt-6 border-t border-gray-700 opacity-0 pointer-events-none">
                      <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
                      <div class="space-y-2 text-sm">
@@ -241,7 +242,7 @@
     
     function addLogEntry(logText, isProcessing = false) {
         const entry = document.createElement('div');
-        entry.className = 'log-entry text-sm';
+        entry.className = 'log-entry';
         if (isProcessing) entry.id = 'processing-log';
         const timestamp = new Date().toLocaleTimeString('es-ES', { hour12: false });
         const coloredText = logText.replace(/\[([^\]]+)\]/g, (match, p1) => {
@@ -342,13 +343,12 @@
         } else if (currentStep < demoSteps.length - 1) {
             currentStep++;
             renderStep(currentStep);
-        } else {
+        } else if (currentStep === demoSteps.length - 1) {
             showSummary(demoSteps[demoSteps.length - 1].summary);
             controlBtn.textContent = 'Reiniciar Demo';
             controlBtn.className = 'bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
-            currentStep++; // Increment to prevent re-triggering summary
-        }
-        if (currentStep > demoSteps.length -1) {
+            currentStep++; 
+        } else {
             resetDemo();
         }
     });
