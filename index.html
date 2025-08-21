@@ -24,6 +24,11 @@
             opacity: 1;
             transform: translateY(0);
         }
+        /* --- NUEVO: Fuente más pequeña para la transcripción --- */
+        .transcript-bubble p {
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+        }
         .feature-item {
             display: flex;
             align-items: center;
@@ -54,7 +59,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Style for speaking indicator */
         .phone-icon-container.speaking {
             animation: pulse 1.5s infinite;
         }
@@ -210,12 +214,11 @@
         spanishVoice = voices.find(voice => voice.lang.startsWith('es-ES')) || voices.find(voice => voice.lang.startsWith('es'));
     }
 
-    function speak(text) {
+    function speak(text, speaker) { // MODIFICADO: Acepta el 'speaker'
         if (!'speechSynthesis' in window) {
             console.log("Speech Synthesis not supported.");
             return;
         }
-        // Cancel any previous speech
         speechSynthesis.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);
@@ -225,15 +228,21 @@
         utterance.lang = 'es-ES';
         utterance.rate = 1;
 
-        utterance.onstart = () => phoneIcon.classList.add('speaking');
-        utterance.onend = () => phoneIcon.classList.remove('speaking');
+        // --- NUEVO: Distingue la voz del cliente y del bot ---
+        if (speaker === 'Carlos') {
+            utterance.pitch = 0.8; // Tono ligeramente más grave para el cliente
+            utterance.rate = 0.95;
+        } else {
+            utterance.pitch = 1.1; // Tono ligeramente más agudo para el bot/agente
+            utterance.onstart = () => phoneIcon.classList.add('speaking');
+            utterance.onend = () => phoneIcon.classList.remove('speaking');
+        }
         
         speechSynthesis.speak(utterance);
     }
 
-    // Load voices when they are ready
     speechSynthesis.onvoiceschanged = loadVoices;
-    loadVoices(); // Initial attempt
+    loadVoices();
 
     // --- Demo Control Logic ---
     function startTimer() {
@@ -296,9 +305,8 @@
         createBubble(step.speaker, step.text);
         highlightFeatures(step.features);
         
-        if (step.speaker === 'Bot' || step.speaker === 'Agente') {
-            speak(step.text);
-        }
+        // --- NUEVO: Llama a la función de voz para TODOS los speakers ---
+        speak(step.text, step.speaker);
         
         let logDelay = 100;
         step.logs.forEach(log => {
@@ -312,7 +320,7 @@
 
     function resetDemo() {
         currentStep = -1;
-        speechSynthesis.cancel(); // Stop any ongoing speech
+        speechSynthesis.cancel();
         transcriptContainer.innerHTML = '';
         techLogContainer.innerHTML = '<span class="text-gray-600">Esperando inicio de la demo...</span>';
         callerNameEl.textContent = 'Soporte Telco';
