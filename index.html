@@ -24,57 +24,52 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Estilos para el log técnico */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: rgb(55 65 81 / 0.5);
+            border-radius: 0.75rem;
+            border: 1px solid transparent;
+            opacity: 0.4;
+            transition: all 0.5s ease;
+        }
+        .feature-item.highlighted {
+            opacity: 1;
+            background-color: rgb(31 41 55 / 0.7);
+            border-color: rgb(59 130 246 / 0.5);
+        }
         .tech-log-container {
             font-family: 'Roboto Mono', monospace;
             background-color: #000;
             border: 1px solid #374151;
-            height: 100%;
         }
         .log-entry {
             opacity: 0;
             transform: translateY(15px);
             transition: opacity 0.3s ease, transform 0.3s ease;
-            padding: 4px 8px;
-            border-radius: 4px;
         }
         .log-entry.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .log-entry .source { color: #60A5FA; /* blue-400 */ }
-        .log-entry .target { color: #F87171; /* red-400 */ }
-        .log-entry .action { color: #4ADE80; /* green-400 */ }
-        .log-entry .data { color: #9CA3AF; /* gray-400 */ }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-7xl mx-auto bg-gray-800 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
+    <div class="w-full max-w-screen-2xl mx-auto bg-gray-800 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Demo Interactiva</h1>
-            <p class="text-lg text-gray-400 mt-2">Atención al Cliente Inteligente por Voz</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Demo Interactiva Completa</h1>
+            <p class="text-lg text-gray-400 mt-2">Experiencia de Cliente · Valor de Negocio · Flujo Técnico</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Columna Izquierda: Log Técnico -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Panel 1: Simulación de la Llamada -->
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
-                <h2 class="text-xl font-semibold mb-4 text-center">Log de Eventos del Sistema</h2>
-                <div id="tech-log" class="tech-log-container p-4 rounded-lg overflow-y-auto flex-grow">
-                    <!-- El log se añadirá aquí -->
-                </div>
-            </div>
-
-            <!-- Columna Derecha: Simulación de la Llamada -->
-            <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
-                <h2 class="text-xl font-semibold mb-4 text-center">Simulación de la Llamada</h2>
+                <h2 class="text-xl font-semibold mb-4 text-center">Panel Cliente</h2>
                 <div class="bg-black rounded-3xl p-4 border-4 border-gray-700 phone-screen max-w-sm mx-auto">
-                    <div class="flex justify-between items-center text-sm text-gray-400 px-2">
-                        <span id="currentTime">10:30</span>
-                        <div class="bg-gray-800 h-6 w-24 rounded-full"></div>
-                        <span>85%</span>
-                    </div>
-                    <div class="text-center mt-8">
+                    <div class="text-center py-8">
                         <div class="w-20 h-20 bg-blue-500 rounded-full mx-auto flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.518.759a11.03 11.03 0 004.28 4.28l.759-1.518a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>
                         </div>
@@ -82,11 +77,28 @@
                         <p id="callStatus" class="text-gray-400 mt-1">llamada entrante...</p>
                         <p id="callTimer" class="text-gray-400 mt-4 text-lg">00:00</p>
                     </div>
-                    <div class="mt-8 h-20"></div>
                 </div>
-                <div id="transcript-container" class="mt-6 space-y-4 flex-grow overflow-y-auto pr-2">
-                    <!-- Las burbujas de la conversación se añadirán aquí -->
+                <div id="transcript-container" class="mt-6 space-y-4 flex-grow overflow-y-auto pr-2"></div>
+            </div>
+
+            <!-- Panel 2: Características Clave -->
+            <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
+                <h2 class="text-xl font-semibold mb-4 text-center">Panel de Valor</h2>
+                <div class="space-y-3 flex-grow">
+                    <div class="feature-item" data-feature-id="1"><span class="text-2xl">⚡️</span><p>Contestación instantánea y proactiva</p></div>
+                    <div class="feature-item" data-feature-id="2"><span class="text-2xl">🔍</span><p>Identificación y contexto del cliente (CRM)</p></div>
+                    <div class="feature-item" data-feature-id="3"><span class="text-2xl">🗣️</span><p>Comprensión del Lenguaje Natural</p></div>
+                    <div class="feature-item" data-feature-id="4"><span class="text-2xl">🔄</span><p>Consulta de sistemas en tiempo real</p></div>
+                    <div class="feature-item" data-feature-id="5"><span class="text-2xl">🚀</span><p>Autoservicio y resolución de problemas</p></div>
+                    <div class="feature-item" data-feature-id="6"><span class="text-2xl">✨</span><p>Escalado transparente a agente humano</p></div>
+                    <div class="feature-item" data-feature-id="7"><span class="text-2xl">📝</span><p>Transferencia de contexto completa</p></div>
                 </div>
+            </div>
+
+            <!-- Panel 3: Log Técnico -->
+            <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
+                <h2 class="text-xl font-semibold mb-4 text-center">Panel Técnico</h2>
+                <div id="tech-log" class="tech-log-container p-4 rounded-lg overflow-y-auto flex-grow"></div>
             </div>
         </div>
 
@@ -101,64 +113,71 @@
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
+            features: [1, 2],
             logs: [
-                { text: "[PBX] -> [ASISTENTE_BEYOND] - INCOMING_CALL: +34..." },
-                { text: "[ASISTENTE_BEYOND] -> [API_CRM] - POST /lookup_customer" },
+                { text: "[PBX] -> [ASISTENTE_BEYOND] - INCOMING_CALL" },
+                { text: "[ASISTENTE_BEYOND] -> [API_CRM] - POST /lookup" },
                 { text: "[API_CRM] -> [ASISTENTE_BEYOND] - RESPONSE: {name: 'Carlos'}" },
                 { text: "[ASISTENTE_BEYOND] -> [API_BILLING] - GET /last_invoice" },
-                { text: "[API_BILLING] -> [ASISTENTE_BEYOND] - RESPONSE: {status: 'issued'}" },
                 { text: "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH" }
             ],
             callerName: "Carlos", callStatus: "Llamada en curso"
         },
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
+            features: [3],
             logs: [
-                { text: "[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION_RESULT" },
-                { text: "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - PROCESS_INTENT: 'query_invoice_issue'" }
+                { text: "[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION" },
+                { text: "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT: 'query_invoice'" }
             ]
         },
         {
             speaker: "Bot", text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
+            features: [4],
             logs: [
-                { text: "[ASISTENTE_BEYOND] -> [API_BILLING] - GET /invoice_details/inv_123" },
+                { text: "[ASISTENTE_BEYOND] -> [API_BILLING] - GET /invoice_details" },
                 { text: "[API_BILLING] -> [ASISTENTE_BEYOND] - RESPONSE: {charge: 'Cine Total'}" },
                 { text: "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH" }
             ]
         },
         {
             speaker: "Carlos", text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
+            features: [],
             logs: [
-                { text: "[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION_RESULT" },
-                { text: "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - PROCESS_INTENT: 'cancel_subscription'" }
+                { text: "[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION" },
+                { text: "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT: 'cancel_subscription'" }
             ]
         },
         {
             speaker: "Bot", text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
+            features: [5],
             logs: [
                 { text: "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH" }
             ]
         },
         {
             speaker: "Carlos", text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
+            features: [],
             logs: [
-                { text: "[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION_RESULT" },
-                { text: "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - PROCESS_INTENT: 'request_human_agent'" }
+                { text: "[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION" },
+                { text: "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT: 'request_human_agent'" }
             ]
         },
         {
             speaker: "Bot", text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación. Por favor, espera un momento.",
+            features: [6, 7],
             logs: [
-                { text: "[ASISTENTE_BEYOND] -> [CONTEXT_MANAGER] - PACKAGE_SESSION_DATA" },
-                { text: "[ASISTENTE_BEYOND] -> [PBX] - INITIATE_TRANSFER: to queue 'sales_promo'" }
+                { text: "[ASISTENTE_BEYOND] -> [CONTEXT_MANAGER] - PACKAGE_DATA" },
+                { text: "[ASISTENTE_BEYOND] -> [PBX] - INITIATE_TRANSFER" }
             ],
             callStatus: "Transfiriendo..."
         },
         {
             speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
+            features: [],
             logs: [
                 { text: "[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED" },
-                { text: "[CONTEXT_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_CONTEXT_DATA" }
+                { text: "[CONTEXT_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA" }
             ],
             callerName: "Marta (Agente)"
         }
@@ -167,20 +186,13 @@
     const controlBtn = document.getElementById('demo-control-btn');
     const transcriptContainer = document.getElementById('transcript-container');
     const techLogContainer = document.getElementById('tech-log');
+    const featureItems = document.querySelectorAll('.feature-item');
     const callerNameEl = document.getElementById('callerName');
     const callStatusEl = document.getElementById('callStatus');
     const callTimerEl = document.getElementById('callTimer');
-    const currentTimeEl = document.getElementById('currentTime');
 
     let currentStep = -1;
     let timerInterval;
-
-    function updateClock() {
-        const now = new Date();
-        currentTimeEl.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
 
     function startTimer() {
         let seconds = 0;
@@ -208,40 +220,44 @@
         transcriptContainer.scrollTop = transcriptContainer.scrollHeight;
         setTimeout(() => bubble.classList.add('visible'), 50);
     }
+    
+    function highlightFeatures(featureIds) {
+        featureItems.forEach(item => {
+            const itemId = parseInt(item.dataset.featureId);
+            if (featureIds.includes(itemId)) {
+                item.classList.add('highlighted');
+            }
+        });
+    }
 
     function addLogEntry(logText) {
         const entry = document.createElement('div');
-        entry.className = 'log-entry text-sm';
-        
+        entry.className = 'log-entry text-sm text-gray-400';
         const timestamp = new Date().toLocaleTimeString('es-ES', { hour12: false });
-        
-        // Simple parser for color coding
         const coloredText = logText.replace(/\[([^\]]+)\]/g, (match, p1) => {
-            let colorClass = 'source';
-            if (match.includes('->')) {
+            if (p1.includes('->')) {
                  const parts = p1.split(' -> ');
-                 return `<span class="source">[${parts[0]}]</span> -&gt; <span class="target">[${parts[1]}]</span>`;
+                 return `<span class="text-blue-400">[${parts[0]}]</span> -&gt; <span class="text-red-400">[${parts[1]}]</span>`;
             }
-            return `<span class="action">[${p1}]</span>`;
+            return `<span class="text-green-400">[${p1}]</span>`;
         });
-
         entry.innerHTML = `<span class="text-gray-500">${timestamp}</span> - ${coloredText}`;
         techLogContainer.appendChild(entry);
         techLogContainer.scrollTop = techLogContainer.scrollHeight;
         setTimeout(() => entry.classList.add('visible'), 50);
     }
 
-
     function renderStep(stepIndex) {
         const step = demoSteps[stepIndex];
         if (!step) return;
 
         createBubble(step.speaker, step.text);
+        highlightFeatures(step.features);
         
         let logDelay = 100;
         step.logs.forEach(log => {
             setTimeout(() => addLogEntry(log.text), logDelay);
-            logDelay += 150; // Stagger the log appearance
+            logDelay += 150;
         });
 
         if (step.callerName) callerNameEl.textContent = step.callerName;
@@ -257,12 +273,13 @@
         callTimerEl.textContent = '00:00';
         controlBtn.textContent = '▶ Iniciar Demo';
         controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
+        featureItems.forEach(item => item.classList.remove('highlighted'));
         stopTimer();
     }
 
     controlBtn.addEventListener('click', () => {
         if (currentStep === -1) {
-            techLogContainer.innerHTML = ''; // Clear initial message
+            techLogContainer.innerHTML = '';
             currentStep++;
             controlBtn.textContent = 'Siguiente Paso →';
             startTimer();
@@ -279,9 +296,9 @@
         }
     });
 
-    // Initial state
     resetDemo();
 </script>
 
 </body>
 </html>
+
