@@ -116,55 +116,54 @@
     </div>
 
 <script>
-    /* --- Mapeo de features a los 5 agentes finales --- */
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
-            features: [1, 2, 4], // Vocal (oye), Identidad (sabe quién es), Integración (consulta factura)
+            features: [1, 2, 4],
             logs: ["[PBX] -> [VOCAL_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [API_CRM] - POST /lookup", "[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /last_invoice", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" },
             callerName: "Carlos", callStatus: "Llamada en curso"
         },
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
-            features: [1], // Vocal (escucha y entiende la intención)
+            features: [1],
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'query_invoice'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" }
         },
         {
             speaker: "Bot", text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
-            features: [3, 4], // Orquestador (decide qué hacer), Integración (consulta los detalles)
+            features: [3, 4],
             logs: ["[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /invoice_details", "[INTEGRATION_AGENT] -> [ORCHESTRATOR_AGENT] - RESPONSE {charge}", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Carlos", text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
-            features: [1], // Vocal (escucha y entiende la nueva intención)
+            features: [1],
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'cancel_subscription'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Bot", text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
-            features: [3, 4], // Orquestador (decide proponer una acción), Integración (listo para ejecutar la cancelación)
+            features: [3, 4],
             logs: ["[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Carlos", text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
-            features: [1], // Vocal (escucha y entiende la intención de escalar)
+            features: [1],
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'request_human_agent'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Bot", text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación. Por favor, espera un momento.",
-            features: [3, 5], // Orquestador (decide escalar), Gestor de Escalado (prepara el resumen y transfiere)
+            features: [3, 5],
             logs: ["[ORCHESTRATOR_AGENT] -> [HANDOFF_MANAGER] - PACKAGE_DATA", "[HANDOFF_MANAGER] -> [PBX] - INITIATE_TRANSFER"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "95%" },
             callStatus: "Transfiriendo..."
         },
         {
             speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
-            features: [5], // Gestor de Escalado (transferencia de contexto completada con éxito)
+            features: [5],
             logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[HANDOFF_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
             kpis: { wait: "0s", fcr: "100%", cost: "Medio", csat: "95%" },
             callerName: "Marta (Agente)",
@@ -307,7 +306,8 @@
             processingLog = addLogEntry("[ORCHESTRATOR_AGENT] - PROCESSING... 🧠", true);
         } else {
              createBubble(step.speaker, step.text);
-             speak(step.text, speaker);
+             // --- CORRECCIÓN APLICADA AQUÍ ---
+             speak(step.text, step.speaker);
         }
 
         setTimeout(() => {
@@ -315,7 +315,8 @@
                 typingIndicator.remove();
                 processingLog.remove();
                 createBubble(step.speaker, step.text);
-                speak(step.text, speaker);
+                // --- CORRECCIÓN APLICADA AQUÍ ---
+                speak(step.text, step.speaker);
             }
             
             highlightFeatures(step.features);
