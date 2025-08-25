@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Interactiva: Arquitectura Multiagente de IA</title>
+    <title>Demo: Arquitectura de IA para Contact Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,33 +66,28 @@
                 <div id="features-list" class="space-y-3 flex-grow">
                     
                     <div class="feature-item" data-feature-id="1">
-                        <span class="text-2xl">🎧</span>
-                        <p><strong>Agente de Percepción:</strong><br><span class="text-gray-400">Transcribe voz, comprende intención y detecta emoción.</span></p>
+                        <span class="text-2xl">🗣️</span>
+                        <p><strong>Agente Vocal:</strong><br><span class="text-gray-400">Procesa la voz e interpreta intenciones en lenguaje natural.</span></p>
                     </div>
 
                     <div class="feature-item" data-feature-id="2">
                         <span class="text-2xl">👤</span>
-                        <p><strong>Agente de Identidad y Contexto:</strong><br><span class="text-gray-400">Autentica al cliente y carga su perfil 360° desde el CRM.</span></p>
+                        <p><strong>Agente de Identidad y Contexto:</strong><br><span class="text-gray-400">Verifica la identidad del usuario y carga perfil desde sistemas internos.</span></p>
                     </div>
 
                     <div class="feature-item" data-feature-id="3">
                         <span class="text-2xl">🧑‍⚖️</span>
-                        <p><strong>Agente Orquestador (Decisión):</strong><br><span class="text-gray-400">Evalúa la intención y selecciona la herramienta adecuada.</span></p>
+                        <p><strong>Agente Orquestador:</strong><br><span class="text-gray-400">Cerebro central que toma decisiones y dirige al resto de agentes.</span></p>
                     </div>
 
                     <div class="feature-item" data-feature-id="4">
-                        <span class="text-2xl">🛠️</span>
-                        <p><strong>Agente de Herramientas (Consulta):</strong><br><span class="text-gray-400">Obtiene datos en tiempo real de sistemas externos (APIs).</span></p>
+                        <span class="text-2xl">⚙️</span>
+                        <p><strong>Agente de Integración:</strong><br><span class="text-gray-400">Único punto de contacto para todos los sistemas externos. Ejecuta consultas y transacciones.</span></p>
                     </div>
 
                     <div class="feature-item" data-feature-id="5">
-                        <span class="text-2xl">🚀</span>
-                        <p><strong>Agente de Herramientas (Ejecución):</strong><br><span class="text-gray-400">Realiza acciones concretas (cancelar, modificar servicios).</span></p>
-                    </div>
-
-                    <div class="feature-item" data-feature-id="6">
-                        <span class="text-2xl">📄</span>
-                        <p><strong>Agente de Escalado y Síntesis:</strong><br><span class="text-gray-400">Resume el contexto y transfiere a un agente humano.</span></p>
+                        <span class="text-2xl">↳</span>
+                        <p><strong>Gestor de Escalado Humano:</strong><br><span class="text-gray-400">Gestiona el proceso de transferencia asegurando una transición de contexto fluida.</span></p>
                     </div>
 
                 </div>
@@ -121,56 +116,56 @@
     </div>
 
 <script>
-    /* --- MODIFICADO: Mapeo de features a los nuevos agentes --- */
+    /* --- Mapeo de features a los 5 agentes finales --- */
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
-            features: [1, 2, 4], // Percepción (oye), Identidad (sabe quién es), Herramientas (consulta factura)
-            logs: ["[PBX] -> [PERCEPTION_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [API_CRM] - POST /lookup", "[ORQUESTRADOR] -> [TOOLS_AGENT] - GET /last_invoice", "[ORQUESTRADOR] -> [TTS_ENGINE] - GENERATE_SPEECH"],
+            features: [1, 2, 4], // Vocal (oye), Identidad (sabe quién es), Integración (consulta factura)
+            logs: ["[PBX] -> [VOCAL_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [API_CRM] - POST /lookup", "[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /last_invoice", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" },
             callerName: "Carlos", callStatus: "Llamada en curso"
         },
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
-            features: [1], // Percepción (escucha y entiende la intención)
-            logs: ["[STT_ENGINE] -> [PERCEPTION_AGENT] - TRANSCRIPTION", "[PERCEPTION_AGENT] -> [ORQUESTRADOR] - INTENT 'query_invoice'"],
+            features: [1], // Vocal (escucha y entiende la intención)
+            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'query_invoice'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" }
         },
         {
             speaker: "Bot", text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
-            features: [3, 4], // Orquestador (decide qué hacer), Herramientas (consulta los detalles)
-            logs: ["[ORQUESTRADOR] -> [TOOLS_AGENT] - GET /invoice_details", "[TOOLS_AGENT] -> [ORQUESTRADOR] - RESPONSE {charge}", "[ORQUESTRADOR] -> [TTS_ENGINE] - GENERATE_SPEECH"],
+            features: [3, 4], // Orquestador (decide qué hacer), Integración (consulta los detalles)
+            logs: ["[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /invoice_details", "[INTEGRATION_AGENT] -> [ORCHESTRATOR_AGENT] - RESPONSE {charge}", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Carlos", text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
-            features: [1], // Percepción (escucha y entiende la nueva intención)
-            logs: ["[STT_ENGINE] -> [PERCEPTION_AGENT] - TRANSCRIPTION", "[PERCEPTION_AGENT] -> [ORQUESTRADOR] - INTENT 'cancel_subscription'"],
+            features: [1], // Vocal (escucha y entiende la nueva intención)
+            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'cancel_subscription'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Bot", text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
-            features: [3, 5], // Orquestador (decide proponer una acción), Herramientas (lista para ejecutar la cancelación)
-            logs: ["[ORQUESTRADOR] -> [TTS_ENGINE] - GENERATE_SPEECH"],
+            features: [3, 4], // Orquestador (decide proponer una acción), Integración (listo para ejecutar la cancelación)
+            logs: ["[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Carlos", text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
-            features: [1], // Percepción (escucha y entiende la intención de escalar)
-            logs: ["[STT_ENGINE] -> [PERCEPTION_AGENT] - TRANSCRIPTION", "[PERCEPTION_AGENT] -> [ORQUESTRADOR] - INTENT 'request_human_agent'"],
+            features: [1], // Vocal (escucha y entiende la intención de escalar)
+            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'request_human_agent'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Bot", text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación. Por favor, espera un momento.",
-            features: [3, 6], // Orquestador (decide escalar), Escalado y Síntesis (prepara el resumen y transfiere)
-            logs: ["[ORQUESTRADOR] -> [ESCALATION_AGENT] - PACKAGE_DATA", "[ESCALATION_AGENT] -> [PBX] - INITIATE_TRANSFER"],
+            features: [3, 5], // Orquestador (decide escalar), Gestor de Escalado (prepara el resumen y transfiere)
+            logs: ["[ORCHESTRATOR_AGENT] -> [HANDOFF_MANAGER] - PACKAGE_DATA", "[HANDOFF_MANAGER] -> [PBX] - INITIATE_TRANSFER"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "95%" },
             callStatus: "Transfiriendo..."
         },
         {
             speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
-            features: [6], // Escalado y Síntesis (transferencia de contexto completada con éxito)
-            logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[ESCALATION_AGENT] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
+            features: [5], // Gestor de Escalado (transferencia de contexto completada con éxito)
+            logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[HANDOFF_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
             kpis: { wait: "0s", fcr: "100%", cost: "Medio", csat: "95%" },
             callerName: "Marta (Agente)",
             summary: { wait: "0s", fcr: "Sí", cost: "Medio", csat: "Alta (95%)" }
@@ -309,10 +304,10 @@
 
         if (isBotTurn) {
             typingIndicator = createTypingIndicator();
-            processingLog = addLogEntry("[ORQUESTRADOR] - PROCESSING... 🧠", true);
+            processingLog = addLogEntry("[ORCHESTRATOR_AGENT] - PROCESSING... 🧠", true);
         } else {
              createBubble(step.speaker, step.text);
-             speak(step.text, step.speaker);
+             speak(step.text, speaker);
         }
 
         setTimeout(() => {
@@ -320,7 +315,7 @@
                 typingIndicator.remove();
                 processingLog.remove();
                 createBubble(step.speaker, step.text);
-                speak(step.text, step.speaker);
+                speak(step.text, speaker);
             }
             
             highlightFeatures(step.features);
