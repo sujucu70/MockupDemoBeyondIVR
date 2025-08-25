@@ -113,16 +113,7 @@
         <div id="summary-container" class="mt-6 opacity-0 pointer-events-none transition-opacity duration-500">
             <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
                 <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
-                <div class="mb-4 px-2 text-center">
-                    <p class="text-sm font-semibold text-gray-300">Outcome General</p>
-                    <p id="summary-outcome" class="text-sm text-white mt-1"></p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                    <p class="flex justify-between md:block md:text-center px-2"><span>✅ Tiempo de espera:</span> <strong id="summary-wait-time" class="md:block md:text-xl md:mt-1"></strong></p>
-                    <p class="flex justify-between md:block md:text-center px-2"><span>✅ Resolución en primer contacto:</span> <strong id="summary-fcr" class="md:block md:text-xl md:mt-1"></strong></p>
-                    <p class="flex justify-between md:block md:text-center px-2"><span>⚠️ Coste de la interacción:</span> <strong id="summary-cost" class="md:block md:text-xl md:mt-1"></strong></p>
-                    <p class="flex justify-between md:block md:text-center px-2"><span>📈 Satisfacción del cliente:</span> <strong id="summary-csat" class="md:block md:text-xl md:mt-1"></strong></p>
-                </div>
+                <p id="summary-outcome" class="text-center text-lg text-gray-200 mt-2 px-4"></p>
             </div>
         </div>
 
@@ -190,13 +181,16 @@
             callStatus: "Transfiriendo..."
         },
         {
-            speaker: "Agente", text: "¡Hola Carlos, soy Antonio! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
+            speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
             features: [5],
             agentTasks: { 5: "Entrega el contexto completo en la pantalla del agente humano antes de que atienda la llamada." },
             logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[HANDOFF_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
             kpis: { wait: "0s", fcr: "100%", cost: "Medio", csat: "95%" },
-            callerName: "Antonio (Agente)",
-            summary: { outcome: "Identificado cargo no conforme y traspaso a humano para detalle antes de cancelar.", wait: "0s", fcr: "Sí", cost: "Medio", csat: "Alta (95%)" }
+            callerName: "Marta (Agente)",
+            // --- CAMBIO: Nuevo texto del outcome ---
+            summary: { 
+                outcome: "El sistema de IA ha identificado correctamente la causa del problema en la factura (un servicio activo) y ha transferido la llamada de forma proactiva a un agente humano para discutir ofertas comerciales, asegurando una experiencia de cliente fluida y sin fricciones."
+            }
         }
     ];
 
@@ -238,7 +232,6 @@
         speechSynthesis.speak(utterance);
     }
 
-    // --- CAMBIO 1: Función de carga de voces reescrita para asegurar voces diferentes ---
     function loadVoices() {
         const allVoices = speechSynthesis.getVoices();
         if (allVoices.length === 0) {
@@ -340,12 +333,9 @@
         });
     }
 
+    // --- CAMBIO: Función de resumen simplificada ---
     function showSummary(summaryData) {
         document.getElementById('summary-outcome').textContent = summaryData.outcome;
-        document.getElementById('summary-wait-time').textContent = summaryData.wait;
-        document.getElementById('summary-fcr').textContent = summaryData.fcr;
-        document.getElementById('summary-cost').textContent = summaryData.cost;
-        document.getElementById('summary-csat').textContent = summaryData.csat;
         summaryContainer.classList.remove('opacity-0', 'pointer-events-none');
     }
 
@@ -419,7 +409,6 @@
         featureItems.forEach(item => item.classList.remove('highlighted'));
         phoneIcon.classList.remove('speaking');
         summaryContainer.classList.add('opacity-0', 'pointer-events-none');
-        // --- CAMBIO 2: Ocultar el botón CTA al reiniciar ---
         ctaBtn.classList.add('hidden');
         
         for (let i = 1; i <= 5; i++) {
@@ -447,7 +436,6 @@
             showSummary(demoSteps[demoSteps.length - 1].summary);
             controlBtn.textContent = 'Reiniciar Demo';
             controlBtn.className = 'bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
-            // --- CAMBIO 2: Mostrar el botón CTA al final ---
             ctaBtn.classList.remove('hidden');
             currentStep++; 
         } else {
