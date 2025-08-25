@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Interactiva: Atención al Cliente Inteligente</title>
+    <title>Demo Interactiva: Arquitectura Multiagente de IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,13 +13,11 @@
         .phone-screen { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
         .transcript-bubble { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
         .transcript-bubble.visible { opacity: 1; transform: translateY(0); }
-        /* --- NUEVO: Texto de transcripción aún más pequeño --- */
         .transcript-bubble p { font-size: 0.75rem; line-height: 1rem; }
         .feature-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background-color: rgb(55 65 81 / 0.5); border-radius: 0.75rem; border: 1px solid transparent; opacity: 0.4; transition: all 0.5s ease; }
         .feature-item.highlighted { opacity: 1; background-color: rgb(31 41 55 / 0.7); border-color: rgb(59 130 246 / 0.5); }
         .tech-log-container { font-family: 'Roboto Mono', monospace; background-color: #000; border: 1px solid #374151; }
         .log-entry { opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease; }
-        /* --- NUEVO: Texto del log técnico más pequeño --- */
         .log-entry { font-size: 0.7rem; line-height: 1rem; }
         .log-entry.visible { opacity: 1; transform: translateY(0); }
         .phone-icon-container.speaking { animation: pulse 1.5s infinite; }
@@ -48,7 +46,6 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Panel 1: Simulación de la Llamada -->
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
                 <h2 class="text-xl font-semibold mb-4 text-center">Panel Cliente</h2>
                 <div class="bg-black rounded-3xl p-4 border-4 border-gray-700 phone-screen max-w-sm mx-auto">
@@ -64,48 +61,41 @@
                 <div id="transcript-container" class="mt-6 space-y-4 flex-grow overflow-y-auto pr-2"></div>
             </div>
 
-            <!-- Panel 2: Características Clave -->
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
-    <h2 class="text-xl font-semibold mb-4 text-center">Panel de Valor</h2>
-    <div id="features-list" class="space-y-3 flex-grow">
-        
-        <div class="feature-item" data-feature-id="1">
-            <span class="text-2xl">⚡️</span>
-            <p><strong>Agente de Bienvenida:</strong><br><span class="text-gray-400">Atiende al instante y se anticipa a la consulta del cliente.</span></p>
-        </div>
+                <h2 class="text-xl font-semibold mb-4 text-center">Panel de Valor (Arquitectura de Agentes)</h2>
+                <div id="features-list" class="space-y-3 flex-grow">
+                    
+                    <div class="feature-item" data-feature-id="1">
+                        <span class="text-2xl">🎧</span>
+                        <p><strong>Agente de Percepción:</strong><br><span class="text-gray-400">Transcribe voz, comprende intención y detecta emoción.</span></p>
+                    </div>
 
-        <div class="feature-item" data-feature-id="2">
-            <span class="text-2xl">🔍</span>
-            <p><strong>Agente de Autenticación:</strong><br><span class="text-gray-400">Valida la identidad y recupera el historial para dar contexto.</span></p>
-        </div>
+                    <div class="feature-item" data-feature-id="2">
+                        <span class="text-2xl">👤</span>
+                        <p><strong>Agente de Identidad y Contexto:</strong><br><span class="text-gray-400">Autentica al cliente y carga su perfil 360° desde el CRM.</span></p>
+                    </div>
 
-        <div class="feature-item" data-feature-id="3">
-            <span class="text-2xl">🗣️</span>
-            <p><strong>Agente NLU (Comprensión):</strong><br><span class="text-gray-400">Interpreta la intención y las emociones en la voz del cliente.</span></p>
-        </div>
+                    <div class="feature-item" data-feature-id="3">
+                        <span class="text-2xl">🧑‍⚖️</span>
+                        <p><strong>Agente Orquestador (Decisión):</strong><br><span class="text-gray-400">Evalúa la intención y selecciona la herramienta adecuada.</span></p>
+                    </div>
 
-        <div class="feature-item" data-feature-id="4">
-            <span class="text-2xl">🔄</span>
-            <p><strong>Agente de Datos:</strong><br><span class="text-gray-400">Consulta sistemas (CRM, facturación) para obtener respuestas.</span></p>
-        </div>
+                    <div class="feature-item" data-feature-id="4">
+                        <span class="text-2xl">🛠️</span>
+                        <p><strong>Agente de Herramientas (Consulta):</strong><br><span class="text-gray-400">Obtiene datos en tiempo real de sistemas externos (APIs).</span></p>
+                    </div>
 
-        <div class="feature-item" data-feature-id="5">
-            <span class="text-2xl">🚀</span>
-            <p><strong>Agente de Resolución:</strong><br><span class="text-gray-400">Ejecuta acciones de forma autónoma para resolver la petición.</span></p>
-        </div>
+                    <div class="feature-item" data-feature-id="5">
+                        <span class="text-2xl">🚀</span>
+                        <p><strong>Agente de Herramientas (Ejecución):</strong><br><span class="text-gray-400">Realiza acciones concretas (cancelar, modificar servicios).</span></p>
+                    </div>
 
-        <div class="feature-item" data-feature-id="6">
-            <span class="text-2xl">✨</span>
-            <p><strong>Agente de Enrutamiento:</strong><br><span class="text-gray-400">Transfiere la llamada al agente humano más adecuado.</span></p>
-        </div>
+                    <div class="feature-item" data-feature-id="6">
+                        <span class="text-2xl">📄</span>
+                        <p><strong>Agente de Escalado y Síntesis:</strong><br><span class="text-gray-400">Resume el contexto y transfiere a un agente humano.</span></p>
+                    </div>
 
-        <div class="feature-item" data-feature-id="7">
-            <span class="text-2xl">📝</span>
-            <p><strong>Agente de Contexto:</strong><br><span class="text-gray-400">Entrega un resumen completo al agente humano para evitar repeticiones.</span></p>
-        </div>
-
-    </div>
-   
+                </div>
                 <div id="value-summary" class="mt-6 pt-6 border-t border-gray-700 opacity-0 pointer-events-none">
                      <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
                      <div class="space-y-2 text-sm">
@@ -117,7 +107,6 @@
                 </div>
             </div>
 
-            <!-- Panel 3: Log Técnico -->
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
                 <h2 class="text-xl font-semibold mb-4 text-center">Panel Técnico</h2>
                 <div id="tech-log" class="tech-log-container p-4 rounded-lg overflow-y-auto flex-grow"></div>
@@ -132,55 +121,56 @@
     </div>
 
 <script>
+    /* --- MODIFICADO: Mapeo de features a los nuevos agentes --- */
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
-            features: [1, 2],
-            logs: ["[PBX] -> [ASISTENTE_BEYOND] - INCOMING_CALL", "[ASISTENTE_BEYOND] -> [API_CRM] - POST /lookup", "[API_CRM] -> [ASISTENTE_BEYOND] - RESPONSE {name}", "[ASISTENTE_BEYOND] -> [API_BILLING] - GET /last_invoice", "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH"],
+            features: [1, 2, 4], // Percepción (oye), Identidad (sabe quién es), Herramientas (consulta factura)
+            logs: ["[PBX] -> [PERCEPTION_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [API_CRM] - POST /lookup", "[ORQUESTRADOR] -> [TOOLS_AGENT] - GET /last_invoice", "[ORQUESTRADOR] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" },
             callerName: "Carlos", callStatus: "Llamada en curso"
         },
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
-            features: [3],
-            logs: ["[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION", "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT 'query_invoice'"],
+            features: [1], // Percepción (escucha y entiende la intención)
+            logs: ["[STT_ENGINE] -> [PERCEPTION_AGENT] - TRANSCRIPTION", "[PERCEPTION_AGENT] -> [ORQUESTRADOR] - INTENT 'query_invoice'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" }
         },
         {
             speaker: "Bot", text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
-            features: [4],
-            logs: ["[ASISTENTE_BEYOND] -> [API_BILLING] - GET /invoice_details", "[API_BILLING] -> [ASISTENTE_BEYOND] - RESPONSE {charge}", "[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH"],
+            features: [3, 4], // Orquestador (decide qué hacer), Herramientas (consulta los detalles)
+            logs: ["[ORQUESTRADOR] -> [TOOLS_AGENT] - GET /invoice_details", "[TOOLS_AGENT] -> [ORQUESTRADOR] - RESPONSE {charge}", "[ORQUESTRADOR] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Carlos", text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
-            features: [],
-            logs: ["[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION", "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT 'cancel_subscription'"],
+            features: [1], // Percepción (escucha y entiende la nueva intención)
+            logs: ["[STT_ENGINE] -> [PERCEPTION_AGENT] - TRANSCRIPTION", "[PERCEPTION_AGENT] -> [ORQUESTRADOR] - INTENT 'cancel_subscription'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Bot", text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
-            features: [5],
-            logs: ["[ASISTENTE_BEYOND] -> [TTS_ENGINE] - GENERATE_SPEECH"],
+            features: [3, 5], // Orquestador (decide proponer una acción), Herramientas (lista para ejecutar la cancelación)
+            logs: ["[ORQUESTRADOR] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Carlos", text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
-            features: [],
-            logs: ["[STT_ENGINE] -> [ASISTENTE_BEYOND] - TRANSCRIPTION", "[ASISTENTE_BEYOND] -> [NLU_ENGINE] - INTENT 'request_human_agent'"],
+            features: [1], // Percepción (escucha y entiende la intención de escalar)
+            logs: ["[STT_ENGINE] -> [PERCEPTION_AGENT] - TRANSCRIPTION", "[PERCEPTION_AGENT] -> [ORQUESTRADOR] - INTENT 'request_human_agent'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Bot", text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación. Por favor, espera un momento.",
-            features: [6, 7],
-            logs: ["[ASISTENTE_BEYOND] -> [CONTEXT_MANAGER] - PACKAGE_DATA", "[ASISTENTE_BEYOND] -> [PBX] - INITIATE_TRANSFER"],
+            features: [3, 6], // Orquestador (decide escalar), Escalado y Síntesis (prepara el resumen y transfiere)
+            logs: ["[ORQUESTRADOR] -> [ESCALATION_AGENT] - PACKAGE_DATA", "[ESCALATION_AGENT] -> [PBX] - INITIATE_TRANSFER"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "95%" },
             callStatus: "Transfiriendo..."
         },
         {
             speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
-            features: [],
-            logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[CONTEXT_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
+            features: [6], // Escalado y Síntesis (transferencia de contexto completada con éxito)
+            logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[ESCALATION_AGENT] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
             kpis: { wait: "0s", fcr: "100%", cost: "Medio", csat: "95%" },
             callerName: "Marta (Agente)",
             summary: { wait: "0s", fcr: "Sí", cost: "Medio", csat: "Alta (95%)" }
@@ -319,7 +309,7 @@
 
         if (isBotTurn) {
             typingIndicator = createTypingIndicator();
-            processingLog = addLogEntry("[ASISTENTE_BEYOND] - PROCESSING... 🧠", true);
+            processingLog = addLogEntry("[ORQUESTRADOR] - PROCESSING... 🧠", true);
         } else {
              createBubble(step.speaker, step.text);
              speak(step.text, step.speaker);
