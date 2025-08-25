@@ -27,14 +27,13 @@
         .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
         .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-        #value-summary { transition: opacity 0.5s ease; }
         .feature-item .text-gray-400 {
             font-size: 0.75rem;
             line-height: 1rem;
-            transition: color 0.3s ease; /* Añadimos una transición suave al texto */
+            transition: color 0.3s ease;
         }
         .feature-item.highlighted .text-gray-400 {
-            color: #FFFFFF; /* Hacemos el texto dinámico blanco al resaltar */
+            color: #FFFFFF;
         }
     </style>
 </head>
@@ -72,64 +71,35 @@
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
                 <h2 class="text-xl font-semibold mb-4 text-center">Proceso Multiagéntico</h2>
                 <div id="features-list" class="space-y-3 flex-grow">
-                    
                     <div class="feature-item" data-feature-id="1">
                         <span class="text-2xl">🗣️</span>
                         <p><strong>Agente Vocal:</strong><br>
-                            <span id="agent-task-1" class="text-gray-400" data-default-text="Conversa e interpreta intenciones en lenguaje natural.">
-                                Conversa e interpreta intenciones en lenguaje natural.
-                            </span>
+                            <span id="agent-task-1" class="text-gray-400" data-default-text="Conversa e interpreta intenciones en lenguaje natural.">Conversa e interpreta intenciones en lenguaje natural.</span>
                         </p>
                     </div>
-
                     <div class="feature-item" data-feature-id="2">
                         <span class="text-2xl">👤</span>
                         <p><strong>Agente de Identidad y Contexto:</strong><br>
-                            <span id="agent-task-2" class="text-gray-400" data-default-text="Verifica la identidad del usuario y carga perfil desde sistemas internos.">
-                                Verifica la identidad del usuario y carga perfil desde sistemas internos.
-                            </span>
+                            <span id="agent-task-2" class="text-gray-400" data-default-text="Verifica la identidad del usuario y carga perfil desde sistemas internos.">Verifica la identidad del usuario y carga perfil desde sistemas internos.</span>
                         </p>
                     </div>
-
                     <div class="feature-item" data-feature-id="3">
                         <span class="text-2xl">🧑‍⚖️</span>
                         <p><strong>Agente Orquestador:</strong><br>
-                           <span id="agent-task-3" class="text-gray-400" data-default-text="Cerebro central que toma decisiones y dirige al resto de agentes.">
-                               Cerebro central que toma decisiones y dirige al resto de agentes.
-                           </span>
+                           <span id="agent-task-3" class="text-gray-400" data-default-text="Cerebro central que toma decisiones y dirige al resto de agentes.">Cerebro central que toma decisiones y dirige al resto de agentes.</span>
                         </p>
                     </div>
-
                     <div class="feature-item" data-feature-id="4">
                         <span class="text-2xl">⚙️</span>
                         <p><strong>Agente de Integración:</strong><br>
-                           <span id="agent-task-4" class="text-gray-400" data-default-text="Punto de contacto para todos los sistemas externos. Ejecuta consultas y transacciones.">
-                               Punto de contacto para todos los sistemas externos. Ejecuta consultas y transacciones.
-                           </span>
+                           <span id="agent-task-4" class="text-gray-400" data-default-text="Punto de contacto para todos los sistemas externos. Ejecuta consultas y transacciones.">Punto de contacto para todos los sistemas externos. Ejecuta consultas y transacciones.</span>
                         </p>
                     </div>
-
                     <div class="feature-item" data-feature-id="5">
                         <span class="text-2xl">↳</span>
                         <p><strong>Gestor de Escalado Humano:</strong><br>
-                            <span id="agent-task-5" class="text-gray-400" data-default-text="Gestiona el proceso de transferencia asegurando una transición de contexto fluida.">
-                                Gestiona el proceso de transferencia asegurando una transición de contexto fluida.
-                            </span>
+                            <span id="agent-task-5" class="text-gray-400" data-default-text="Gestiona el proceso de transferencia asegurando una transición de contexto fluida.">Gestiona el proceso de transferencia asegurando una transición de contexto fluida.</span>
                         </p>
-                    </div>
-
-                </div>
-                <div id="value-summary" class="mt-6 pt-6 border-t border-gray-700 opacity-0 pointer-events-none">
-                    <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
-                    <div class="mb-4 px-2 text-center">
-                        <p class="text-sm font-semibold text-gray-300">Outcome</p>
-                        <p id="summary-outcome" class="text-sm text-white mt-1"></p>
-                    </div>
-                    <div class="space-y-2 text-sm">
-                        <p class="flex justify-between px-2"><span>✅ Tiempo de espera:</span> <strong id="summary-wait-time"></strong></p>
-                        <p class="flex justify-between px-2"><span>✅ Resolución en primer contacto:</span> <strong id="summary-fcr"></strong></p>
-                        <p class="flex justify-between px-2"><span>⚠️ Coste de la interacción:</span> <strong id="summary-cost"></strong></p>
-                        <p class="flex justify-between px-2"><span>📈 Satisfacción del cliente:</span> <strong id="summary-csat"></strong></p>
                     </div>
                 </div>
             </div>
@@ -137,6 +107,22 @@
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
                 <h2 class="text-xl font-semibold mb-4 text-center">Panel Técnico</h2>
                 <div id="tech-log" class="tech-log-container p-4 rounded-lg overflow-y-auto flex-grow"></div>
+            </div>
+        </div>
+        
+        <div id="summary-container" class="mt-6 opacity-0 pointer-events-none transition-opacity duration-500">
+            <div id="value-summary" class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+                <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
+                <div class="mb-4 px-2 text-center">
+                    <p class="text-sm font-semibold text-gray-300">Outcome General</p>
+                    <p id="summary-outcome" class="text-sm text-white mt-1"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <p class="flex justify-between md:block md:text-center px-2"><span>✅ Tiempo de espera:</span> <strong id="summary-wait-time" class="md:block md:text-xl md:mt-1"></strong></p>
+                    <p class="flex justify-between md:block md:text-center px-2"><span>✅ Resolución en primer contacto:</span> <strong id="summary-fcr" class="md:block md:text-xl md:mt-1"></strong></p>
+                    <p class="flex justify-between md:block md:text-center px-2"><span>⚠️ Coste de la interacción:</span> <strong id="summary-cost" class="md:block md:text-xl md:mt-1"></strong></p>
+                    <p class="flex justify-between md:block md:text-center px-2"><span>📈 Satisfacción del cliente:</span> <strong id="summary-csat" class="md:block md:text-xl md:mt-1"></strong></p>
+                </div>
             </div>
         </div>
 
@@ -148,19 +134,11 @@
     </div>
 
 <script>
-    /* ============================================================== */
-    /* PASO 2: ESTRUCTURA DE DATOS AMPLIADA CON agentTasks           */
-    /* ============================================================== */
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
             features: [1, 2, 3, 4],
-            agentTasks: {
-                1: "Recibe la llamada entrante y la transcribe a texto.",
-                2: "Identifica al cliente 'Carlos' a través de su número de teléfono.",
-                3: "Decide proactivamente consultar la última factura como primer paso.",
-                4: "Consulta la API de facturación para obtener los datos de la última factura."
-            },
+            agentTasks: { 1: "Recibe la llamada entrante y la transcribe a texto.", 2: "Identifica al cliente 'Carlos' a través de su número de teléfono.", 3: "Decide proactivamente consultar la última factura como primer paso.", 4: "Consulta la API de facturación para obtener los datos de la última factura." },
             logs: ["[PBX] -> [VOCAL_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [API_CRM] - POST /lookup", "[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /last_invoice", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" },
             callerName: "Carlos", callStatus: "Llamada en curso"
@@ -168,60 +146,42 @@
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
             features: [1, 3],
-            agentTasks: {
-                1: "Interpreta la intención del cliente: 'consultar detalle de factura'.",
-                3: "Recibe la intención y prepara la siguiente acción: consultar detalles."
-            },
+            agentTasks: { 1: "Interpreta la intención del cliente: 'consultar detalle de factura'.", 3: "Recibe la intención y prepara la siguiente acción: consultar detalles." },
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'query_invoice'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" }
         },
         {
             speaker: "Bot", text: "Entiendo tu preocupación, déjame que lo revise... Vale, ya lo tengo. Veo que el incremento se debe a la suscripción al paquete 'Cine Total'. ¿Puede ser?",
             features: [3, 4],
-            agentTasks: {
-                3: "Solicita al Agente de Integración los detalles del cargo.",
-                4: "Ejecuta la consulta en la API de facturación y devuelve el concepto 'Cine Total'."
-            },
+            agentTasks: { 3: "Solicita al Agente de Integración los detalles del cargo.", 4: "Ejecuta la consulta en la API de facturación y devuelve el concepto 'Cine Total'." },
             logs: ["[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /invoice_details", "[INTEGRATION_AGENT] -> [ORCHESTRATOR_AGENT] - RESPONSE {charge}", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Carlos", text: "Es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
             features: [1, 3],
-            agentTasks: {
-                1: "Interpreta la nueva intención del cliente: 'cancelar suscripción'.",
-                3: "Recibe la intención y prepara la siguiente acción: ofrecer la cancelación."
-            },
+            agentTasks: { 1: "Interpreta la nueva intención del cliente: 'cancelar suscripción'.", 3: "Recibe la intención y prepara la siguiente acción: ofrecer la cancelación." },
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'cancel_subscription'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
         {
             speaker: "Bot", text: "No hay problema. Si lo deseas, puedo cancelar la suscripción ahora mismo para que no se genere ningún cargo en tu próxima factura. ¿Quieres que lo haga?",
             features: [3, 4],
-            agentTasks: {
-                3: "Decide ofrecer la cancelación como una acción de autoservicio.",
-                4: "Prepara la transacción de 'cancelar suscripción' en espera de confirmación."
-            },
+            agentTasks: { 3: "Decide ofrecer la cancelación como una acción de autoservicio.", 4: "Prepara la transacción de 'cancelar suscripción' en espera de confirmación." },
             logs: ["[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Carlos", text: "Antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
             features: [1, 3],
-            agentTasks: {
-                1: "Interpreta la intención final: 'solicitar agente humano'.",
-                3: "Detecta la necesidad de escalado y detiene el flujo de automatización."
-            },
+            agentTasks: { 1: "Interpreta la intención final: 'solicitar agente humano'.", 3: "Detecta la necesidad de escalado y detiene el flujo de automatización." },
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'request_human_agent'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
         {
             speaker: "Bot", text: "Por supuesto. Te paso ahora mismo con un agente. Y no te preocupes, le voy a transmitir toda nuestra conversación. Por favor, espera un momento.",
             features: [3, 5],
-            agentTasks: {
-                3: "Inicia el protocolo de escalado y solicita un resumen del caso.",
-                5: "Sintetiza la conversación y prepara el paquete de datos para la transferencia."
-            },
+            agentTasks: { 3: "Inicia el protocolo de escalado y solicita un resumen del caso.", 5: "Sintetiza la conversación y prepara el paquete de datos para la transferencia." },
             logs: ["[ORCHESTRATOR_AGENT] -> [HANDOFF_MANAGER] - PACKAGE_DATA", "[HANDOFF_MANAGER] -> [PBX] - INITIATE_TRANSFER"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "95%" },
             callStatus: "Transfiriendo..."
@@ -229,19 +189,11 @@
         {
             speaker: "Agente", text: "¡Hola Carlos, soy Marta! Gracias por esperar. Mi compañero virtual me pasó tu caso. Veo que quieres ver si hay alguna promoción para el paquete 'Cine Total', ¿correcto?",
             features: [5],
-            agentTasks: {
-                5: "Entrega el contexto completo en la pantalla del agente humano antes de que atienda la llamada."
-            },
+            agentTasks: { 5: "Entrega el contexto completo en la pantalla del agente humano antes de que atienda la llamada." },
             logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[HANDOFF_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
             kpis: { wait: "0s", fcr: "100%", cost: "Medio", csat: "95%" },
             callerName: "Marta (Agente)",
-            summary: { 
-                outcome: "Identificado cargo no conforme y traspaso a humano para detalle antes de cancelar.",
-                wait: "0s", 
-                fcr: "Sí", 
-                cost: "Medio", 
-                csat: "Alta (95%)" 
-            }
+            summary: { outcome: "Identificado cargo no conforme y traspaso a humano para detalle antes de cancelar.", wait: "0s", fcr: "Sí", cost: "Medio", csat: "Alta (95%)" }
         }
     ];
 
@@ -253,19 +205,27 @@
     const callStatusEl = document.getElementById('callStatus');
     const callTimerEl = document.getElementById('callTimer');
     const phoneIcon = document.getElementById('phone-icon');
-    const valueSummary = document.getElementById('value-summary');
+    // --- CAMBIO 2: Se referencia el nuevo contenedor del resumen ---
+    const summaryContainer = document.getElementById('summary-container');
     
     const kpiElements = { wait: document.getElementById('kpi-wait-time'), fcr: document.getElementById('kpi-fcr'), cost: document.getElementById('kpi-cost'), csat: document.getElementById('kpi-csat') };
 
-    let currentStep = -1;
-    let timerInterval;
+    // --- CAMBIO 1: Variables para las dos voces ---
     let spanishVoice = null;
+    let humanVoice = null;
 
     function speak(text, speaker) {
         if (!'speechSynthesis' in window) return;
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        if (spanishVoice) utterance.voice = spanishVoice;
+        
+        // --- CAMBIO 1: Lógica para seleccionar la voz ---
+        if (speaker === 'Agente' && humanVoice) {
+            utterance.voice = humanVoice; // Usa la voz humana si está disponible
+        } else if (spanishVoice) {
+            utterance.voice = spanishVoice; // Usa la voz del bot por defecto
+        }
+        
         utterance.lang = 'es-ES';
         if (speaker === 'Carlos') {
             utterance.pitch = 0.8; utterance.rate = 0.95;
@@ -277,9 +237,20 @@
         speechSynthesis.speak(utterance);
     }
 
+    // --- CAMBIO 1: Función actualizada para cargar ambas voces ---
     function loadVoices() {
         const voices = speechSynthesis.getVoices();
+        // Carga la primera voz en español que encuentre (será la del bot)
         spanishVoice = voices.find(voice => voice.lang.startsWith('es-ES')) || voices.find(voice => voice.lang.startsWith('es'));
+        
+        // Busca una segunda voz en español que sea diferente a la del bot
+        // A menudo, los sistemas tienen varias (ej. Helena y Pablo en Windows)
+        humanVoice = voices.find(voice => (voice.lang.startsWith('es-ES') || voice.lang.startsWith('es')) && voice.name !== spanishVoice?.name);
+
+        // Si no encuentra una segunda voz, usa la misma del bot para no dar error
+        if (!humanVoice) {
+            humanVoice = spanishVoice;
+        }
     }
     speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
@@ -358,13 +329,14 @@
         });
     }
 
+    // --- CAMBIO 2: Función actualizada para mostrar el resumen ---
     function showSummary(summaryData) {
         document.getElementById('summary-outcome').textContent = summaryData.outcome;
         document.getElementById('summary-wait-time').textContent = summaryData.wait;
         document.getElementById('summary-fcr').textContent = summaryData.fcr;
         document.getElementById('summary-cost').textContent = summaryData.cost;
         document.getElementById('summary-csat').textContent = summaryData.csat;
-        valueSummary.classList.remove('opacity-0', 'pointer-events-none');
+        summaryContainer.classList.remove('opacity-0', 'pointer-events-none');
     }
 
     function renderStep(stepIndex) {
@@ -374,11 +346,6 @@
         transcriptContainer.innerHTML = '';
         featureItems.forEach(item => item.classList.remove('highlighted'));
         
-        /* ============================================================== */
-        /* PASO 3: LÓGICA ACTUALIZADA PARA MOSTRAR TEXTO DINÁMICO       */
-        /* ============================================================== */
-
-        // Primero, restauramos todos los textos a su valor por defecto
         for (let i = 1; i <= 5; i++) {
             const taskSpan = document.getElementById(`agent-task-${i}`);
             if (taskSpan) {
@@ -386,7 +353,6 @@
             }
         }
 
-        // Luego, actualizamos solo los agentes activos en este paso
         if (step.agentTasks) {
             Object.keys(step.agentTasks).forEach(agentId => {
                 const taskSpan = document.getElementById(`agent-task-${agentId}`);
@@ -442,9 +408,9 @@
         controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
         featureItems.forEach(item => item.classList.remove('highlighted'));
         phoneIcon.classList.remove('speaking');
-        valueSummary.classList.add('opacity-0', 'pointer-events-none');
+        // --- CAMBIO 2: Se oculta el nuevo contenedor del resumen ---
+        summaryContainer.classList.add('opacity-0', 'pointer-events-none');
         
-        // Restaurar textos por defecto al resetear
         for (let i = 1; i <= 5; i++) {
             const taskSpan = document.getElementById(`agent-task-${i}`);
             if (taskSpan) {
