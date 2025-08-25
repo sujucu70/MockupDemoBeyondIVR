@@ -111,7 +111,7 @@
         </div>
         
         <div id="summary-container" class="mt-6 opacity-0 pointer-events-none transition-opacity duration-500">
-            <div id="value-summary" class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+            <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
                 <h3 class="text-xl font-bold text-green-400 mb-4 text-center">Resultados de la Interacción</h3>
                 <div class="mb-4 px-2 text-center">
                     <p class="text-sm font-semibold text-gray-300">Outcome General</p>
@@ -126,10 +126,13 @@
             </div>
         </div>
 
-        <div class="mt-8 text-center">
+        <div class="mt-8 text-center flex justify-center items-center space-x-4">
             <button id="demo-control-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
                 ▶ Iniciar Demo
             </button>
+            <a href="#" id="cta-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
+                Pruébalo tú mismo
+            </a>
         </div>
     </div>
 
@@ -205,13 +208,14 @@
     const callStatusEl = document.getElementById('callStatus');
     const callTimerEl = document.getElementById('callTimer');
     const phoneIcon = document.getElementById('phone-icon');
-    // --- CAMBIO 2: Se referencia el nuevo contenedor del resumen ---
     const summaryContainer = document.getElementById('summary-container');
+    // --- CAMBIO 3: Se referencia el nuevo botón CTA ---
+    const ctaBtn = document.getElementById('cta-btn');
     
     const kpiElements = { wait: document.getElementById('kpi-wait-time'), fcr: document.getElementById('kpi-fcr'), cost: document.getElementById('kpi-cost'), csat: document.getElementById('kpi-csat') };
 
-    // --- CAMBIO 1: Variables para las dos voces ---
-    let spanishVoice = null;
+    // --- CAMBIO 2: Variables para la voz del bot y la voz humana ---
+    let botVoice = null;
     let humanVoice = null;
 
     function speak(text, speaker) {
@@ -219,11 +223,11 @@
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         
-        // --- CAMBIO 1: Lógica para seleccionar la voz ---
+        // --- CAMBIO 2: Lógica mejorada para seleccionar la voz ---
         if (speaker === 'Agente' && humanVoice) {
-            utterance.voice = humanVoice; // Usa la voz humana si está disponible
-        } else if (spanishVoice) {
-            utterance.voice = spanishVoice; // Usa la voz del bot por defecto
+            utterance.voice = humanVoice;
+        } else if (botVoice) {
+            utterance.voice = botVoice;
         }
         
         utterance.lang = 'es-ES';
@@ -237,22 +241,41 @@
         speechSynthesis.speak(utterance);
     }
 
-    // --- CAMBIO 1: Función actualizada para cargar ambas voces ---
+    // --- CAMBIO 2: Función reescrita para una selección de voz más precisa ---
     function loadVoices() {
-        const voices = speechSynthesis.getVoices();
-        // Carga la primera voz en español que encuentre (será la del bot)
-        spanishVoice = voices.find(voice => voice.lang.startsWith('es-ES')) || voices.find(voice => voice.lang.startsWith('es'));
-        
-        // Busca una segunda voz en español que sea diferente a la del bot
-        // A menudo, los sistemas tienen varias (ej. Helena y Pablo en Windows)
-        humanVoice = voices.find(voice => (voice.lang.startsWith('es-ES') || voice.lang.startsWith('es')) && voice.name !== spanishVoice?.name);
+        // La obtención de voces puede ser asíncrona, esperamos a que estén listas.
+        const allVoices = speechSynthesis.getVoices();
+        if (allVoices.length === 0) {
+            speechSynthesis.onvoiceschanged = () => loadVoices();
+            return;
+        }
 
-        // Si no encuentra una segunda voz, usa la misma del bot para no dar error
+        const spanishVoices = allVoices.filter(voice => voice.lang === 'es-ES');
+
+        if (spanishVoices.length === 0) {
+            console.warn("No se encontraron voces para 'es-ES'. Usando fallback a 'es'.");
+            const fallbackVoices = allVoices.filter(voice => voice.lang.startsWith('es'));
+            botVoice = fallbackVoices[0] || null;
+            humanVoice = fallbackVoices[1] || botVoice; // Si solo hay una, se usa la misma
+            return;
+        }
+
+        // Intenta asignar una voz masculina (común en Windows/Chrome) al bot
+        botVoice = spanishVoices.find(voice => voice.name.toLowerCase().includes('pablo')) || spanishVoices[0];
+
+        // Intenta asignar una voz femenina (común en Windows/Chrome) al agente humano
+        humanVoice = spanishVoices.find(voice => voice.name.toLowerCase().includes('laura') || voice.name.toLowerCase().includes('helena'));
+
+        // Si no se encuentra una voz femenina específica, busca cualquier otra voz de es-ES
         if (!humanVoice) {
-            humanVoice = spanishVoice;
+            humanVoice = spanishVoices.find(voice => voice.name !== botVoice.name);
+        }
+
+        // Si sigue sin haber una segunda voz, se usa la misma que la del bot para evitar errores
+        if (!humanVoice) {
+            humanVoice = botVoice;
         }
     }
-    speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
 
     function startTimer() {
@@ -329,13 +352,13 @@
         });
     }
 
-    // --- CAMBIO 2: Función actualizada para mostrar el resumen ---
     function showSummary(summaryData) {
         document.getElementById('summary-outcome').textContent = summaryData.outcome;
         document.getElementById('summary-wait-time').textContent = summaryData.wait;
         document.getElementById('summary-fcr').textContent = summaryData.fcr;
         document.getElementById('summary-cost').textContent = summaryData.cost;
         document.getElementById('summary-csat').textContent = summaryData.csat;
+        // --- CAMBIO 1: Se muestra el contenedor del resumen ---
         summaryContainer.classList.remove('opacity-0', 'pointer-events-none');
     }
 
@@ -408,7 +431,7 @@
         controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
         featureItems.forEach(item => item.classList.remove('highlighted'));
         phoneIcon.classList.remove('speaking');
-        // --- CAMBIO 2: Se oculta el nuevo contenedor del resumen ---
+        // --- CAMBIO 1: Se oculta el contenedor del resumen ---
         summaryContainer.classList.add('opacity-0', 'pointer-events-none');
         
         for (let i = 1; i <= 5; i++) {
@@ -440,6 +463,12 @@
         } else {
             resetDemo();
         }
+    });
+
+    // --- CAMBIO 3: Event listener para el nuevo botón CTA ---
+    ctaBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Evita que el enlace navegue
+        alert('Aquí iría la acción del CTA, como abrir una nueva página de prueba.');
     });
 
     resetDemo();
