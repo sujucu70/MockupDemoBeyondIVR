@@ -34,8 +34,8 @@
 
     <div class="w-full max-w-screen-2xl mx-auto bg-gray-800 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
         <div class="text-center mb-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Demo Interactiva Completa</h1>
-            <p class="text-lg text-gray-400 mt-2">Experiencia de Cliente · Valor de Negocio · Flujo Técnico</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Demo BeyondFCR</h1>
+            <p class="text-lg text-gray-400 mt-2">Experiencia de Cliente · Proceso multiagéntico · Flujo Técnico</p>
         </div>
 
         <div id="kpi-panel" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-4 rounded-xl border border-gray-700">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
-                <h2 class="text-xl font-semibold mb-4 text-center">Panel de Valor (Arquitectura de Agentes)</h2>
+                <h2 class="text-xl font-semibold mb-4 text-center">Proceso Multiagéntico</h2>
                 <div id="features-list" class="space-y-3 flex-grow">
                     
                     <div class="feature-item" data-feature-id="1">
@@ -103,7 +103,7 @@
             </div>
 
             <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col">
-                <h2 class="text-xl font-semibold mb-4 text-center">Panel Técnico</h2>
+                <h2 class="text-xl font-semibold mb-4 text-center">Flujo Técnico</h2>
                 <div id="tech-log" class="tech-log-container p-4 rounded-lg overflow-y-auto flex-grow"></div>
             </div>
         </div>
@@ -116,17 +116,18 @@
     </div>
 
 <script>
+    /* --- CORREGIDO: Sincronización de features con los logs --- */
     const demoSteps = [
         {
             speaker: "Bot", text: "Hola Carlos, bienvenido al soporte. Veo que tu última factura se emitió hace un par de días. ¿Es posible que llames por alguna consulta sobre ella?",
-            features: [1, 2, 4],
+            features: [1, 2, 3, 4],
             logs: ["[PBX] -> [VOCAL_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [API_CRM] - POST /lookup", "[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /last_invoice", "[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" },
             callerName: "Carlos", callStatus: "Llamada en curso"
         },
         {
             speaker: "Carlos", text: "Sí, exacto. Es que me ha llegado una factura de 85 euros y no entiendo por qué ha subido tanto este mes.",
-            features: [1],
+            features: [1, 3],
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'query_invoice'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "92%" }
         },
@@ -138,7 +139,7 @@
         },
         {
             speaker: "Carlos", text: "Ah, es verdad, lo activé para una prueba. Pues no me interesa mantenerlo.",
-            features: [1],
+            features: [1, 3],
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'cancel_subscription'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "93%" }
         },
@@ -150,7 +151,7 @@
         },
         {
             speaker: "Carlos", text: "Pues mira, antes de cancelarlo, preferiría hablar con una persona para ver si hay alguna oferta o promoción.",
-            features: [1],
+            features: [1, 3],
             logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'request_human_agent'"],
             kpis: { wait: "0s", fcr: "100%", cost: "Bajo", csat: "94%" }
         },
@@ -296,6 +297,11 @@
         const step = demoSteps[stepIndex];
         if (!step) return;
 
+        // --- NUEVO: Limpia la transcripción y el resaltado anterior ---
+        transcriptContainer.innerHTML = '';
+        featureItems.forEach(item => item.classList.remove('highlighted'));
+        // --- FIN DEL CAMBIO ---
+
         updateKpis(step.kpis);
 
         const isBotTurn = step.speaker !== 'Carlos';
@@ -306,7 +312,6 @@
             processingLog = addLogEntry("[ORCHESTRATOR_AGENT] - PROCESSING... 🧠", true);
         } else {
              createBubble(step.speaker, step.text);
-             // --- CORRECCIÓN APLICADA AQUÍ ---
              speak(step.text, step.speaker);
         }
 
@@ -315,7 +320,6 @@
                 typingIndicator.remove();
                 processingLog.remove();
                 createBubble(step.speaker, step.text);
-                // --- CORRECCIÓN APLICADA AQUÍ ---
                 speak(step.text, step.speaker);
             }
             
