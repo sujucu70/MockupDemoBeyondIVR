@@ -130,7 +130,7 @@
             <button id="demo-control-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
                 ▶ Iniciar Demo
             </button>
-            <a href="#" id="cta-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
+            <a href="#" id="cta-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg hidden">
                 Pruébalo tú mismo
             </a>
         </div>
@@ -209,12 +209,10 @@
     const callTimerEl = document.getElementById('callTimer');
     const phoneIcon = document.getElementById('phone-icon');
     const summaryContainer = document.getElementById('summary-container');
-    // --- CAMBIO 3: Se referencia el nuevo botón CTA ---
     const ctaBtn = document.getElementById('cta-btn');
     
     const kpiElements = { wait: document.getElementById('kpi-wait-time'), fcr: document.getElementById('kpi-fcr'), cost: document.getElementById('kpi-cost'), csat: document.getElementById('kpi-csat') };
 
-    // --- CAMBIO 2: Variables para la voz del bot y la voz humana ---
     let botVoice = null;
     let humanVoice = null;
 
@@ -223,7 +221,6 @@
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         
-        // --- CAMBIO 2: Lógica mejorada para seleccionar la voz ---
         if (speaker === 'Agente' && humanVoice) {
             utterance.voice = humanVoice;
         } else if (botVoice) {
@@ -241,39 +238,30 @@
         speechSynthesis.speak(utterance);
     }
 
-    // --- CAMBIO 2: Función reescrita para una selección de voz más precisa ---
+    // --- CAMBIO 1: Función de carga de voces reescrita para asegurar voces diferentes ---
     function loadVoices() {
-        // La obtención de voces puede ser asíncrona, esperamos a que estén listas.
         const allVoices = speechSynthesis.getVoices();
         if (allVoices.length === 0) {
             speechSynthesis.onvoiceschanged = () => loadVoices();
             return;
         }
 
-        const spanishVoices = allVoices.filter(voice => voice.lang === 'es-ES');
+        let spanishVoices = allVoices.filter(voice => voice.lang === 'es-ES');
 
         if (spanishVoices.length === 0) {
-            console.warn("No se encontraron voces para 'es-ES'. Usando fallback a 'es'.");
-            const fallbackVoices = allVoices.filter(voice => voice.lang.startsWith('es'));
-            botVoice = fallbackVoices[0] || null;
-            humanVoice = fallbackVoices[1] || botVoice; // Si solo hay una, se usa la misma
-            return;
+            console.warn("No se encontraron voces 'es-ES'. Buscando en 'es'.");
+            spanishVoices = allVoices.filter(voice => voice.lang.startsWith('es'));
         }
 
-        // Intenta asignar una voz masculina (común en Windows/Chrome) al bot
-        botVoice = spanishVoices.find(voice => voice.name.toLowerCase().includes('pablo')) || spanishVoices[0];
-
-        // Intenta asignar una voz femenina (común en Windows/Chrome) al agente humano
-        humanVoice = spanishVoices.find(voice => voice.name.toLowerCase().includes('laura') || voice.name.toLowerCase().includes('helena'));
-
-        // Si no se encuentra una voz femenina específica, busca cualquier otra voz de es-ES
-        if (!humanVoice) {
-            humanVoice = spanishVoices.find(voice => voice.name !== botVoice.name);
-        }
-
-        // Si sigue sin haber una segunda voz, se usa la misma que la del bot para evitar errores
-        if (!humanVoice) {
-            humanVoice = botVoice;
+        if (spanishVoices.length >= 2) {
+            botVoice = spanishVoices[0];
+            humanVoice = spanishVoices[1];
+        } else if (spanishVoices.length === 1) {
+            console.warn("Solo se encontró una voz en español. Se usará la misma para el bot y el agente humano.");
+            botVoice = spanishVoices[0];
+            humanVoice = spanishVoices[0];
+        } else {
+            console.error("No se encontró ninguna voz en español en el sistema.");
         }
     }
     loadVoices();
@@ -358,7 +346,6 @@
         document.getElementById('summary-fcr').textContent = summaryData.fcr;
         document.getElementById('summary-cost').textContent = summaryData.cost;
         document.getElementById('summary-csat').textContent = summaryData.csat;
-        // --- CAMBIO 1: Se muestra el contenedor del resumen ---
         summaryContainer.classList.remove('opacity-0', 'pointer-events-none');
     }
 
@@ -431,8 +418,9 @@
         controlBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
         featureItems.forEach(item => item.classList.remove('highlighted'));
         phoneIcon.classList.remove('speaking');
-        // --- CAMBIO 1: Se oculta el contenedor del resumen ---
         summaryContainer.classList.add('opacity-0', 'pointer-events-none');
+        // --- CAMBIO 2: Ocultar el botón CTA al reiniciar ---
+        ctaBtn.classList.add('hidden');
         
         for (let i = 1; i <= 5; i++) {
             const taskSpan = document.getElementById(`agent-task-${i}`);
@@ -459,15 +447,16 @@
             showSummary(demoSteps[demoSteps.length - 1].summary);
             controlBtn.textContent = 'Reiniciar Demo';
             controlBtn.className = 'bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg';
+            // --- CAMBIO 2: Mostrar el botón CTA al final ---
+            ctaBtn.classList.remove('hidden');
             currentStep++; 
         } else {
             resetDemo();
         }
     });
 
-    // --- CAMBIO 3: Event listener para el nuevo botón CTA ---
     ctaBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // Evita que el enlace navegue
+        e.preventDefault();
         alert('Aquí iría la acción del CTA, como abrir una nueva página de prueba.');
     });
 
