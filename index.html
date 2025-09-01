@@ -42,14 +42,14 @@
     <div class="w-full max-w-screen-2xl mx-auto bg-gray-800 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700">
         <div class="text-center mb-4">
             <h1 class="text-3xl md:text-4xl font-bold text-white">Demo Beyond IVR</h1>
-            <p class="text-lg text-gray-400 mt-2">Autoservicio Inteligente · Resolución Inmediata · Experiencia sin Esperas</p>
+            <p class="text-lg text-gray-400 mt-2">Enrutamiento Inteligente · Transferencia de Contexto · Experiencia Híbrida</p>
         </div>
 
         <div id="kpi-panel" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-gray-900/50 p-4 rounded-xl border border-gray-700">
-            <div class="text-center"><p class="text-sm text-gray-400">Tasa de Resolución (FCR)</p><p id="kpi-fcr" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
-            <div class="text-center"><p class="text-sm text-gray-400">Tiempo de Espera</p><p id="kpi-wait-time" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
-            <div class="text-center"><p class="text-sm text-gray-400">Coste por Interacción</p><p id="kpi-cost" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
-            <div class="text-center"><p class="text-sm text-gray-400">Satisfacción Cliente</p><p id="kpi-csat" class="text-2xl font-bold text-green-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">Tasa de Resolución (FCR)</p><p id="kpi-fcr" class="text-2xl font-bold text-red-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">Tiempo de Espera</p><p id="kpi-wait-time" class="text-2xl font-bold text-red-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">Coste por Interacción</p><p id="kpi-cost" class="text-2xl font-bold text-red-400 kpi-value">--</p></div>
+            <div class="text-center"><p class="text-sm text-gray-400">Satisfacción Cliente</p><p id="kpi-csat" class="text-2xl font-bold text-red-400 kpi-value">--</p></div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -130,57 +130,38 @@
 <script>
     const demoSteps = [
         {
-            speaker: "Bot", text: "Hola Alba, gracias por llamar a paquetería XYZ. He visto que tienes un pedido en camino. ¿Llamas por el pedido que termina en 52-B?",
+            speaker: "Bot", text: "Hola Alba, gracias por llamar a paquetería XYZ. Veo que tienes un pedido en camino que termina en 52-B. ¿Puedo ayudarte con eso?",
             features: [1, 2],
             agentTasks: { 1: "Recibe la llamada y la transcribe.", 2: "Identifica a 'Alba' y recupera su pedido activo desde el CRM." },
             logs: ["[PBX] -> [VOCAL_AGENT] - INCOMING_CALL", "[IDENTITY_AGENT] -> [CRM_API] - POST /lookup_customer"],
-            kpis: { fcr: "70%", "wait-time": "2 min", cost: "Alto", csat: "75%" },
+            kpis: { fcr: "50%", "wait-time": "3 min", cost: "Alto", csat: "60%" },
             callerName: "Alba", callStatus: "Llamada en curso"
         },
         {
-            speaker: "Alba", text: "Sí, exacto. Es que no estaré en casa y quería saber si puedo cambiar la fecha de entrega.",
+            speaker: "Alba", text: "Sí, es que en el seguimiento online pone que el paquete está dañado y quiero saber qué ha pasado y poner una reclamación.",
             features: [1, 3],
-            agentTasks: { 1: "Interpreta la intención: 'reprogramar entrega'.", 3: "Entiende la solicitud y decide el siguiente paso: consultar opciones." },
-            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'reschedule_delivery'"],
-            kpis: { fcr: "70%", "wait-time": "2 min", cost: "Alto", csat: "80%" }
+            agentTasks: { 1: "Interpreta una intención compleja y de alta urgencia: 'paquete dañado'.", 3: "Recibe y tipifica la intención como 'crítica' y no automatizable." },
+            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'damaged_package_claim'"],
+            kpis: { fcr: "50%", "wait-time": "3 min", cost: "Alto", csat: "65%" }
         },
         {
-            speaker: "Bot", text: "¡Por supuesto! Entiendo que quieres reprogramar la entrega. Déjame un segundo que consulto las opciones... (pausa) Tu entrega está programada para mañana. Las fechas alternativas disponibles son: pasado mañana, Jueves 28, o el Lunes 1 de Septiembre. ¿Cuál te viene mejor?",
-            features: [3, 4],
-            agentTasks: { 3: "Solicita al Agente de Integración las fechas de entrega disponibles.", 4: "Consulta la API de logística en tiempo real y devuelve las fechas alternativas." },
-            logs: ["[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - GET /delivery_options", "[INTEGRATION_AGENT] -> [ORCHESTRATOR_AGENT] - RESPONSE {dates}"],
-            kpis: { fcr: "85%", "wait-time": "0s", cost: "Bajo", csat: "90%" }
+            speaker: "Bot", text: "Entiendo perfectamente tu preocupación, Alba. Veo que se trata de una incidencia con tu paquete. Para darte la mejor solución, te voy a pasar directamente con un agente especializado en reclamaciones. No te preocupes, le entrego toda la información para que no tengas que repetir nada. Un momento, por favor.",
+            features: [3, 5],
+            agentTasks: { 3: "Toma la decisión de escalar al departamento correcto sin pasar por menús.", 5: "Prepara el paquete de datos y busca un agente en la cola de 'Incidencias'." },
+            logs: ["[ORCHESTRATOR_AGENT] -> INTENT_REQUIRES_HUMAN", "[ORCHESTRATOR_AGENT] -> [HANDOFF_MANAGER] - ROUTE_TO_QUEUE('Incidencias')"],
+            kpis: { fcr: "95%", "wait-time": "0s", cost: "Medio", csat: "85%" },
+            callStatus: "Transfiriendo a especialista..."
         },
         {
-            speaker: "Alba", text: "El Lunes 1 me viene perfecto.",
-            features: [1, 3],
-            agentTasks: { 1: "Detecta la fecha seleccionada por el cliente.", 3: "Prepara la confirmación final de la nueva fecha." },
-            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - DATE_CONFIRMED"],
-            kpis: { fcr: "90%", "wait-time": "0s", cost: "Bajo", csat: "92%" }
-        },
-        {
-            speaker: "Bot", text: "Genial. Acabo de confirmar tu nueva fecha de entrega para el Lunes 1 de Septiembre. Recibirás un SMS de confirmation en tu móvil en unos segundos. ¿Puedo ayudarte en algo más?",
-            features: [3, 4],
-            agentTasks: { 3: "Instruye al Agente de Integración para que actualice la fecha y notifique.", 4: "Actualiza la fecha en el sistema logístico (API) y dispara el envío del SMS." },
-            logs: ["[ORCHESTRATOR_AGENT] -> [INTEGRATION_AGENT] - POST /update_delivery", "[INTEGRATION_AGENT] -> [NOTIFICATION_SERVICE] - SEND_SMS"],
-            kpis: { fcr: "95%", "wait-time": "0s", cost: "Bajo", csat: "95%" }
-        },
-        {
-            speaker: "Alba", text: "No, eso es todo, muchas gracias.",
-            features: [1],
-            agentTasks: { 1: "Detecta la intención de finalizar la llamada." },
-            logs: ["[STT_ENGINE] -> [VOCAL_AGENT] - TRANSCRIPTION", "[VOCAL_AGENT] -> [ORCHESTRATOR_AGENT] - INTENT 'end_call'"],
-            kpis: { fcr: "95%", "wait-time": "0s", cost: "Bajo", csat: "96%" }
-        },
-        {
-            speaker: "Bot", text: "Muchas gracias, encantado de haberte podido ayudar y a tu disposición si puedo ayudarte en algo mas.",
-            features: [3],
-            agentTasks: { 3: "Finaliza la conversación de forma amable y profesional." },
-            logs: ["[ORCHESTRATOR_AGENT] -> [TTS_ENGINE] - GENERATE_SPEECH", "[PBX] -> CALL_ENDED"],
-            kpis: { fcr: "95%", "wait-time": "0s", cost: "Bajo", csat: "96%" },
-            callStatus: "Llamada finalizada",
+            speaker: "Agente", text: "Hola Alba, soy Javier, especialista en incidencias. Gracias por esperar. Estoy viendo aquí toda la información de tu pedido 52-B y entiendo que aparece como dañado en el seguimiento. Lamento mucho lo ocurrido, déjame que lo gestiono ahora mismo.",
+            features: [5],
+            agentTasks: { 5: "Entrega el contexto completo en la pantalla del agente, que atiende la llamada ya informado." },
+            logs: ["[PBX] -> [AGENT_SOFTPHONE] - CALL_ACCEPTED", "[HANDOFF_MANAGER] -> [AGENT_SOFTPHONE] - DISPLAY_DATA"],
+            kpis: { fcr: "95%", "wait-time": "0s", cost: "Medio", csat: "95%" },
+            callerName: "Javier (Especialista)",
+            callStatus: "Incidencia en gestión",
             summary: { 
-                outcome: "La consulta ha sido resuelta en 45 segundos, de forma automática y sin pasar por menús de espera, confirmando la nueva fecha de entrega y enviando una notificación por SMS."
+                outcome: "El sistema de IA ha comprendido una incidencia compleja del cliente, la ha clasificado correctamente y ha enrutado la llamada al especialista adecuado sin menús y con el contexto completo, eliminando la necesidad de repetición y asegurando una resolución eficiente."
             }
         }
     ];
@@ -213,7 +194,7 @@
         }
         
         utterance.lang = 'es-ES';
-        if (speaker === 'Alba') { // Adaptado al nuevo speaker
+        if (speaker === 'Alba') {
             utterance.pitch = 1.2; utterance.rate = 1.05;
         } else {
             utterance.pitch = 1.0; utterance.rate = 1.0;
@@ -275,7 +256,7 @@
     function createBubble(speaker, text) {
         const bubble = document.createElement('div');
         bubble.className = 'p-3 rounded-lg max-w-xs md:max-w-md transcript-bubble';
-        if (speaker === 'Alba') { // Adaptado al nuevo speaker
+        if (speaker === 'Alba') {
             bubble.classList.add('bg-blue-600', 'rounded-br-none', 'ml-auto');
             bubble.innerHTML = `<p>${text}</p>`;
         } else {
@@ -317,7 +298,21 @@
         if (!kpiData) return;
         Object.keys(kpiData).forEach(key => {
             if (kpiElements[key]) {
-                kpiElements[key].textContent = kpiData[key];
+                const element = kpiElements[key];
+                element.textContent = kpiData[key];
+                // Lógica de colores para KPIs
+                const value = kpiData[key];
+                element.classList.remove('text-green-400', 'text-yellow-400', 'text-red-400');
+                if (key === 'fcr' || key === 'csat') {
+                    const numericValue = parseInt(value);
+                    if (numericValue >= 90) element.classList.add('text-green-400');
+                    else if (numericValue >= 70) element.classList.add('text-yellow-400');
+                    else element.classList.add('text-red-400');
+                } else if (key === 'wait-time' || key === 'cost') {
+                    if (value === '0s' || value === 'Bajo') element.classList.add('text-green-400');
+                    else if (value === 'Medio') element.classList.add('text-yellow-400');
+                    else element.classList.add('text-red-400');
+                }
             }
         });
     }
@@ -352,7 +347,7 @@
 
         updateKpis(step.kpis);
 
-        const isBotTurn = step.speaker !== 'Alba'; // Adaptado al nuevo speaker
+        const isBotTurn = step.speaker !== 'Alba';
         let typingIndicator, processingLog;
 
         if (isBotTurn) {
@@ -421,10 +416,6 @@
             currentStep++;
             renderStep(currentStep);
         } else if (currentStep === demoSteps.length - 1) {
-            renderStep(currentStep);
-            controlBtn.textContent = 'Ver Resultados';
-            currentStep++;
-        } else if (currentStep === demoSteps.length) {
             showSummary(demoSteps[demoSteps.length - 1].summary);
             stopTimer();
             controlBtn.textContent = 'Reiniciar Demo';
